@@ -25,6 +25,7 @@ body{background:#08080b;}
 @keyframes blockIn{from{opacity:0;transform:scale(0.86)}to{opacity:1;transform:scale(1)}}
 @keyframes slidePanel{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes backdropIn{from{opacity:0}to{opacity:1}}
+@keyframes modalIn{from{opacity:0;transform:translate(-50%,-48%) scale(0.94)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 
 .wcard{background:linear-gradient(160deg,#111116 0%,#0c0c10 100%);border:0.5px solid rgba(255,255,255,0.07);border-radius:16px;box-shadow:0 40px 80px rgba(0,0,0,0.6),0 0 0 0.5px rgba(127,255,212,0.05) inset;position:relative;overflow:hidden;}
 .wcard::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.01) 2px,rgba(255,255,255,0.01) 4px);pointer-events:none;}
@@ -35,15 +36,29 @@ body{background:#08080b;}
 .tbtn:hover{background:rgba(127,255,212,0.06);border-color:rgba(127,255,212,0.22);}
 .tbtn.sel{background:rgba(127,255,212,0.1);border-color:rgba(127,255,212,0.45);}
 .tbtn.loading-state{pointer-events:none;opacity:0.6;}
-.hcta{background:transparent;border:0.5px solid rgba(255,255,255,0.18);border-radius:8px;color:#ece9e4;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.02em;padding:8px 18px;transition:all 0.18s;}
-.hcta:hover{background:rgba(127,255,212,0.09);border-color:rgba(127,255,212,0.4);color:#7fffd4;}
+.hcta{background:linear-gradient(25deg,rgb(0, 0, 0) 0%, #82261E 70%);border:0.5px solid rgba(130,38,30,0.45);border-radius:8px;color:#F0F5F3;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.02em;padding:8px 18px;transition:all 0.18s;}
+.hcta:hover{background:linear-gradient(25deg,rgb(0, 0, 0) 0%, #9a2f24 70%);border-color:rgba(130,38,30,0.62);color:#F0F5F3;}
 .rbtn{background:rgba(127,255,212,0.07);border:0.5px solid rgba(127,255,212,0.22);border-radius:8px;color:#7fffd4;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;padding:7px 14px;transition:all 0.18s;}
 .rbtn:hover{background:rgba(127,255,212,0.14);}
 .pbtn{background:rgba(127,255,212,0.12);border:0.5px solid rgba(127,255,212,0.4);border-radius:10px;color:#7fffd4;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:12px 28px;transition:all 0.2s;letter-spacing:0.02em;}
 .pbtn:hover{background:rgba(127,255,212,0.2);transform:scale(1.02);}
+.pbtn:disabled{opacity:0.55;cursor:not-allowed;transform:none;}
+.accentbtn{background:linear-gradient(25deg,rgb(0, 0, 0) 0%, #82261E 70%);border:0.5px solid rgba(130,38,30,0.45);color:#F0F5F3;}
+.accentbtn:hover{background:linear-gradient(25deg,rgb(0, 0, 0) 0%, #9a2f24 70%);border-color:rgba(130,38,30,0.62);color:#F0F5F3;}
 .abtn{background:transparent;border:none;color:#5a5a62;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;letter-spacing:0.01em;padding:8px 14px;transition:color 0.18s;}
 .abtn:hover{color:#ece9e4;}
+
+/* ── Contact form inputs ── */
+.cinput{width:100%;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.1);border-radius:8px;color:#ece9e4;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 14px;outline:none;transition:border-color 0.18s,background 0.18s;appearance:none;-webkit-appearance:none;resize:vertical;}
+.cinput:focus{border-color:rgba(127,255,212,0.45);background:rgba(127,255,212,0.025);}
+.cinput::placeholder{color:#2a2a3a;}
+.cinput option{background:#111116;color:#ece9e4;}
+.live-scroll::-webkit-scrollbar{width:3px;}
+.live-scroll::-webkit-scrollbar-track{background:transparent;}
+.live-scroll::-webkit-scrollbar-thumb{background:rgba(127,255,212,0.2);border-radius:3px;}
+.live-scroll::-webkit-scrollbar-thumb:hover{background:rgba(127,255,212,0.4);}
 `;
+
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -430,25 +445,21 @@ function StepToolSelect({dept, onDone}) {
   const [selected, setSelected] = useState([]);
   const [loading, setLoading] = useState(false);
   const selectedRef = useRef([]);
-  const timerRef = useRef(null);
   const tools = DEPT_TOOLS[dept?.id] || DEPT_TOOLS.product;
 
   const toggle = (id) => {
     if (loading) return;
     const s = selectedRef.current;
-    const next = s.includes(id) ? s.filter(x => x !== id) : [...s, id].slice(0, 4);
+    const next = s.includes(id) ? s.filter(x => x !== id) : [...s, id];
     selectedRef.current = next;
     setSelected([...next]);
-
-    if (next.length >= 2 && !timerRef.current) {
-      setLoading(true);
-      timerRef.current = setTimeout(() => {
-        onDone(selectedRef.current);
-      }, 2000);
-    }
   };
 
-  useEffect(() => () => { if(timerRef.current) clearTimeout(timerRef.current); }, []);
+  const handleContinue = () => {
+    if (selectedRef.current.length < 2) return;
+    setLoading(true);
+    setTimeout(() => { onDone(selectedRef.current); }, 2000);
+  };
 
   return (
     <div style={{padding:"28px 32px 24px",minHeight:380}}>
@@ -481,10 +492,15 @@ function StepToolSelect({dept, onDone}) {
               );
             })}
           </div>
-          <div style={{display:"flex",justifyContent:"flex-end",marginTop:12}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:14}}>
             <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:selected.length>=2?"#7fffd4":"#3a3a42",transition:"color 0.3s"}}>
-              {selected.length} selected{selected.length>=2?" — analysing…":""}
+              {selected.length === 0 ? "none selected" : selected.length === 1 ? "1 selected — pick one more" : `${selected.length} selected`}
             </span>
+            {selected.length >= 2 && (
+              <button className="pbtn" onClick={handleContinue} style={{fontSize:12,padding:"9px 20px",animation:"fadeUp 0.3s ease"}}>
+                Continue
+              </button>
+            )}
           </div>
         </>
       ) : (
@@ -493,7 +509,6 @@ function StepToolSelect({dept, onDone}) {
             <div style={{width:6,height:6,borderRadius:"50%",background:"#fbbf24"}}/>
             <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:11,color:"#fbbf24",letterSpacing:"0.12em"}}>CONFIGURE WORKSPACE</span>
           </div>
-          {/* Selected tools confirmation */}
           <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:28}}>
             {selected.map(id=>{
               const t=(DEPT_TOOLS[dept?.id]||DEPT_TOOLS.product).find(x=>x.id===id);
@@ -534,14 +549,12 @@ function StepJourney({dept, selectedTools, onContinue}) {
         <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:11,color:"#a78bfa",letterSpacing:"0.12em"}}>YOUR 90-DAY JOURNEY</span>
       </div>
 
-      {/* Confirmed tools row */}
       <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:18}}>
         {chosen.map(t=>(
           <span key={t.id} style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:t.color,background:`${t.color}10`,border:`0.5px solid ${t.color}33`,borderRadius:4,padding:"2px 8px",letterSpacing:"0.06em"}}>{t.icon} {t.label}</span>
         ))}
       </div>
 
-      {/* Timeline */}
       <div style={{position:"relative",marginBottom:16}}>
         <div style={{position:"absolute",left:15,top:16,bottom:16,width:0.5,background:"rgba(255,255,255,0.06)"}}/>
         <div style={{position:"absolute",left:15,top:16,width:0.5,background:"rgba(127,255,212,0.25)",height:`${(visible/JOURNEY.length)*100}%`,transition:"height 0.45s ease"}}/>
@@ -612,8 +625,7 @@ function StepReveal({dept, selectedTools, isoPhase, taskPct, growthPct, graphPoi
           </div>
         </div>
       ) : (
-        <div style={{padding:"14px 20px 16px",flex:1}}>
-          {/* Global stats */}
+        <div className="live-scroll" style={{padding:"14px 20px 16px",flex:1,overflowY:"auto",maxHeight:"calc(100vh - 220px)"}}>
           <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8,marginBottom:12}}>
             {[
               {label:"Automations",val:`${tools.length*2}`,accent:"#7fffd4"},
@@ -628,7 +640,6 @@ function StepReveal({dept, selectedTools, isoPhase, taskPct, growthPct, graphPoi
             ))}
           </div>
 
-          {/* Task drain + graph */}
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
             <div style={{background:"rgba(255,255,255,0.025)",border:"0.5px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"12px 14px"}}>
               <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:8,color:"#5a5a62",letterSpacing:"0.1em",marginBottom:7}}>REPETITIVE TASKS</div>
@@ -647,7 +658,6 @@ function StepReveal({dept, selectedTools, isoPhase, taskPct, growthPct, graphPoi
             </div>
           </div>
 
-          {/* Live tool panels */}
           <div style={{display:"grid",gridTemplateColumns:cols,gap:8}}>
             {tools.map(tool=>{
               const PanelComp=PANEL_MAP[tool.id]||PanelDocs;
@@ -669,9 +679,539 @@ function StepReveal({dept, selectedTools, isoPhase, taskPct, growthPct, graphPoi
   );
 }
 
+// ─── Contact Modal ────────────────────────────────────────────────────────────
+
+function ContactModal({onClose, dept, selectedTools}) {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    company: "",
+    role: "",
+    teamSize: "",
+    department: dept?.label || "",
+    challenge: "",
+    tools: "",
+    source: "",
+  });
+  const [phase, setPhase] = useState("form"); // "form" | "submitting" | "success"
+
+  // ⚠️ Replace this with your deployed Apps Script web app URL
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxHX4R2hc5ba2g7g1X-TekSqtjklcFXg6S7eyrU6KFutigkM8L9OwPNblUiEOZKwaIl/exec";
+
+  const upd = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setPhase("submitting");
+
+    const payload = {
+      ...form,
+      exploredDept: dept?.label || "",
+      exploredTools: selectedTools.join(", "),
+      submittedAt: new Date().toISOString(),
+    };
+
+    try {
+      // Using no-cors because Apps Script doesn't support CORS preflight.
+      // The data is sent and written to the sheet even though we can't read
+      // the response — we show success optimistically after a short delay.
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+    } catch (_) {}
+
+    setTimeout(() => setPhase("success"), 900);
+  };
+
+  const lbl = {
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: 10,
+    color: "#5a5a62",
+    letterSpacing: "0.1em",
+    marginBottom: 6,
+    display: "block",
+  };
+
+  const DEPT_OPTIONS = ["Product", "Growth", "Operations", "Finance", "Marketing", "Other"];
+  const SIZE_OPTIONS = ["1–5", "6–20", "21–100", "101–500", "500+"];
+
+  // Resolve explored tool labels for display in the note
+  const exploredToolLabels = selectedTools
+    .map((id) => {
+      const allTools = Object.values(DEPT_TOOLS).flat();
+      return allTools.find((t) => t.id === id)?.label;
+    })
+    .filter(Boolean);
+
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        onClick={onClose}
+        style={{
+          position: "fixed", inset: 0,
+          background: "rgba(0,0,0,0.68)",
+          zIndex: 60,
+          animation: "backdropIn 0.3s ease",
+          cursor: "pointer",
+        }}
+      />
+
+      {/* Modal */}
+      <div
+        style={{
+          position: "fixed",
+          top: "50%", left: "50%",
+          transform: "translate(-50%,-50%)",
+          width: "min(540px, 95vw)",
+          maxHeight: "92vh",
+          background: "linear-gradient(160deg,#111116 0%,#0c0c10 100%)",
+          border: "0.5px solid rgba(255,255,255,0.08)",
+          borderRadius: 16,
+          zIndex: 70,
+          display: "flex",
+          flexDirection: "column",
+          animation: "modalIn 0.38s cubic-bezier(0.34,1.56,0.64,1) both",
+          boxShadow: "0 60px 120px rgba(0,0,0,0.85), 0 0 0 0.5px rgba(127,255,212,0.06) inset",
+          overflowY: "auto",
+        }}
+      >
+        {/* Header */}
+        <div
+          style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            padding: "20px 28px 18px",
+            borderBottom: "0.5px solid rgba(255,255,255,0.06)",
+            flexShrink: 0,
+            position: "sticky", top: 0,
+            background: "linear-gradient(160deg,#111116 0%,#0c0c10 100%)",
+            zIndex: 1,
+          }}
+        >
+          <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <div style={{width:6,height:6,borderRadius:"50%",background:"#7fffd4",animation:"pulse 1.6s infinite"}}/>
+            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7fffd4",letterSpacing:"0.12em"}}>
+              START THE CONVERSATION
+            </span>
+          </div>
+          <button
+            onClick={onClose}
+            style={{background:"none",border:"none",color:"#5a5a62",cursor:"pointer",fontSize:18,padding:"4px 8px",transition:"color 0.18s",lineHeight:1}}
+            onMouseEnter={e=>e.currentTarget.style.color="#ece9e4"}
+            onMouseLeave={e=>e.currentTarget.style.color="#5a5a62"}
+          >✕</button>
+        </div>
+
+        {/* Success state */}
+        {phase === "success" ? (
+          <div
+            style={{
+              padding: "56px 28px",
+              textAlign: "center",
+              display: "flex", flexDirection: "column",
+              alignItems: "center", gap: 22,
+              animation: "fadeUp 0.4s ease",
+            }}
+          >
+            <div
+              style={{
+                width: 58, height: 58, borderRadius: "50%",
+                background: "rgba(127,255,212,0.08)",
+                border: "0.5px solid rgba(127,255,212,0.3)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}
+            >
+              <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:22,color:"#7fffd4"}}>✓</span>
+            </div>
+            <div>
+              <h3
+                style={{
+                  fontFamily: "'Syne',sans-serif", fontSize: 20, fontWeight: 700,
+                  color: "#ece9e4", marginBottom: 10, letterSpacing: "-0.01em",
+                }}
+              >
+                You're on our radar.
+              </h3>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#6b6b72",lineHeight:1.85,maxWidth:320,margin:"0 auto"}}>
+                We've got everything we need. Expect to hear from us within{" "}
+                <span style={{color:"#7fffd4"}}>3 business days</span> — we'll review what you shared and come to the conversation fully prepared.
+              </p>
+            </div>
+            <div
+              style={{
+                background: "rgba(127,255,212,0.04)",
+                border: "0.5px solid rgba(127,255,212,0.12)",
+                borderRadius: 10, padding: "12px 20px",
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 10,
+                color: "#5a5a62", letterSpacing: "0.08em",
+              }}
+            >
+              ↳ WE ALREADY HAVE AN UNDERSTANDING OF WHERE YOU'RE HEADED
+            </div>
+            <button className="pbtn accentbtn" onClick={onClose} style={{marginTop:4}}>
+              Close
+            </button>
+          </div>
+        ) : (
+          /* Form */
+          <form onSubmit={submit} style={{padding:"24px 28px 32px",display:"flex",flexDirection:"column",gap:16}}>
+
+            {/* Context note */}
+            <div
+              style={{
+                background: "rgba(127,255,212,0.04)",
+                border: "0.5px solid rgba(127,255,212,0.14)",
+                borderRadius: 10, padding: "14px 16px",
+              }}
+            >
+              {dept ? (
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#6b6b72",lineHeight:1.8,margin:0}}>
+                  We already have a sense of where you're headed —{" "}
+                  <span style={{color:"#ece9e4",fontWeight:500}}>{dept.label}</span>
+                  {exploredToolLabels.length > 0 && (
+                    <> with tools like <span style={{color:"#ece9e4"}}>{exploredToolLabels.join(", ")}</span></>
+                  )}. Share a bit more and we'll come to the conversation fully prepared.
+                  <span style={{display:"block",fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#7fffd4",marginTop:8,letterSpacing:"0.09em"}}>
+                    ↳ WE REACH OUT WITHIN 3 BUSINESS DAYS · MAX
+                  </span>
+                </p>
+              ) : (
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#6b6b72",lineHeight:1.8,margin:0}}>
+                  Tell us about your team and what you're trying to solve. We'll reach out within 3 business days, fully prepared to build something that fits.
+                  <span style={{display:"block",fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#7fffd4",marginTop:8,letterSpacing:"0.09em"}}>
+                  
+                  </span>
+                </p>
+              )}
+            </div>
+
+            {/* Name + Email */}
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+              <div>
+                <label style={lbl}>FULL NAME *</label>
+                <input
+                  required name="name" value={form.name} onChange={upd}
+                  placeholder="Jane Smith" className="cinput"
+                />
+              </div>
+              <div>
+                <label style={lbl}>WORK EMAIL *</label>
+                <input
+                  required type="email" name="email" value={form.email} onChange={upd}
+                  placeholder="jane@company.com" className="cinput"
+                />
+              </div>
+            </div>
+
+            {/* Company + Role */}
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+              <div>
+                <label style={lbl}>COMPANY *</label>
+                <input
+                  required name="company" value={form.company} onChange={upd}
+                  placeholder="Company name" className="cinput"
+                />
+              </div>
+              <div>
+                <label style={lbl}>YOUR ROLE *</label>
+                <input
+                  required name="role" value={form.role} onChange={upd}
+                  placeholder="Head of Operations" className="cinput"
+                />
+              </div>
+            </div>
+
+            {/* Team size + Department */}
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+              <div>
+                <label style={lbl}>TEAM SIZE *</label>
+                <select
+                  required name="teamSize" value={form.teamSize} onChange={upd}
+                  className="cinput" style={{cursor:"pointer"}}
+                >
+                  <option value="">Select…</option>
+                  {SIZE_OPTIONS.map(s => (
+                    <option key={s} value={s}>{s} people</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label style={lbl}>DEPARTMENT FOCUS *</label>
+                <select
+                  required name="department" value={form.department} onChange={upd}
+                  className="cinput" style={{cursor:"pointer"}}
+                >
+                  <option value="">Select…</option>
+                  {DEPT_OPTIONS.map(d => (
+                    <option key={d} value={d}>{d}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Biggest challenge — most important question */}
+            <div>
+              <label style={lbl}>WHAT'S YOUR BIGGEST OPERATIONAL CHALLENGE RIGHT NOW? *</label>
+              <textarea
+                required name="challenge" value={form.challenge} onChange={upd}
+                placeholder="e.g. Our approval process takes weeks, tasks fall between tools, no visibility across the team, everything lives in spreadsheets…"
+                className="cinput"
+                style={{minHeight:90,lineHeight:1.65}}
+              />
+            </div>
+
+            {/* Current tools */}
+            <div>
+              <label style={lbl}>TOOLS YOUR TEAM CURRENTLY USES <span style={{color:"#3a3a42"}}>(optional)</span></label>
+              <input
+                name="tools" value={form.tools} onChange={upd}
+                placeholder="e.g. Notion, Slack, Asana, HubSpot, Airtable, Monday…"
+                className="cinput"
+              />
+              <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#2a2a3a",marginTop:5}}>
+                This helps us understand what needs to integrate or be replaced.
+              </div>
+            </div>
+
+            {/* Source */}
+            <div>
+              <label style={lbl}>HOW DID YOU FIND US? <span style={{color:"#3a3a42"}}>(optional)</span></label>
+              <input
+                name="source" value={form.source} onChange={upd}
+                placeholder="LinkedIn, referral, Google, event…"
+                className="cinput"
+              />
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              className="pbtn accentbtn"
+              disabled={phase === "submitting"}
+              style={{width:"100%",textAlign:"center",marginTop:4}}
+            >
+              {phase === "submitting"
+                ? "Sending…"
+                : "Send your request"}
+            </button>
+
+            <p style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#2a2a3a",textAlign:"center",letterSpacing:"0.06em"}}>
+              No spam. Ever. Just a real conversation about your workspace.
+            </p>
+          </form>
+        )}
+      </div>
+    </>
+  );
+}
+
+// ─── Investor Panel ───────────────────────────────────────────────────────────
+
+function InvestorPanel({onClose, onContact}) {
+  return (
+    <>
+      <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.55)",zIndex:40,animation:"backdropIn 0.3s ease",cursor:"pointer"}}/>
+      <div style={{position:"fixed",top:0,right:0,width:"min(440px,100vw)",height:"100vh",background:"linear-gradient(180deg,#0f0f14 0%,#0a0a0d 100%)",borderLeft:"0.5px solid rgba(255,255,255,0.08)",zIndex:50,display:"flex",flexDirection:"column",animation:"slidePanel 0.38s cubic-bezier(0.32,0.72,0,1)",overflowY:"auto"}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"20px 28px 18px",borderBottom:"0.5px solid rgba(255,255,255,0.06)",flexShrink:0}}>
+          <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <div style={{width:6,height:6,borderRadius:"50%",background:"#fbbf24"}}/>
+            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#fbbf24",letterSpacing:"0.12em"}}>INVESTORS & PARTNERS</span>
+          </div>
+          <button onClick={onClose} style={{background:"none",border:"none",color:"#5a5a62",cursor:"pointer",fontSize:18,lineHeight:1,padding:"4px 8px",transition:"color 0.18s"}}
+            onMouseEnter={e=>e.currentTarget.style.color="#ece9e4"}
+            onMouseLeave={e=>e.currentTarget.style.color="#5a5a62"}>✕</button>
+        </div>
+        <div style={{padding:"32px 28px 40px",display:"flex",flexDirection:"column",gap:28}}>
+          <div>
+            <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:22,fontWeight:700,color:"#ece9e4",lineHeight:1.25,letterSpacing:"-0.01em",marginBottom:14}}>
+              We're building this with our hands. And we're looking for the right people to build it with us.
+            </h2>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8}}>
+              We're an early-stage, hands-on team. Every workspace we deliver is intentional. Every client we take on, we commit to fully. That's what makes the results real - and that's what makes them stick.
+            </p>
+          </div>
+          <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
+          <div>
+            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#fbbf24",letterSpacing:"0.12em",marginBottom:12}}>WHERE WE ARE</div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8}}>
+              We have early customers. We have proof. Nine workspaces delivered, twelve teams that now operate differently than they did before. The demand is real, the product works, and we know exactly what we're doing. Now we need to do more of it.
+            </p>
+          </div>
+          <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
+          <div>
+            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#a78bfa",letterSpacing:"0.12em",marginBottom:12}}>WHAT WE'RE LOOKING FOR</div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8,marginBottom:12}}>
+              We're not looking for passive capital. We're looking for partners who understand what broken internal tooling costs a company - who want to be part of fixing that at scale and helping us reach our best for our customers.
+            </p>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#8a8a95",lineHeight:1.8}}>
+              If you can open doors, share experience, and increase our volume and reach - that's the kind of partnership that makes sense here.
+            </p>
+          </div>
+          <div style={{background:"rgba(251,191,36,0.04)",border:"0.5px solid rgba(251,191,36,0.12)",borderRadius:12,padding:"20px 22px"}}>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:16,marginBottom:16}}>
+              {[{n:"9",label:"Workspaces built"},{n:"12",label:"First customers"},{n:"90",label:"Days to delivery"}].map(s=>(
+                <div key={s.label}>
+                  <div style={{fontFamily:"'Syne',sans-serif",fontSize:28,fontWeight:800,color:"#fbbf24",lineHeight:1}}>{s.n}</div>
+                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#5a5a62",marginTop:4}}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#6b6b72",lineHeight:1.75}}>
+              Early stage, real traction. We're growing deliberately, choosing quality over speed. The right investment and partnership accelerates that without compromising it.
+            </p>
+          </div>
+          <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
+          <div>
+            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7fffd4",letterSpacing:"0.12em",marginBottom:12}}>THE OPPORTUNITY</div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8}}>
+              Teams everywhere are realizing their tools don't fit. They patch together software never designed for them, losing months to the wrong systems. The market for custom, human-first operational workspaces is wide open and we know how to build them.
+            </p>
+          </div>
+          <div style={{background:"rgba(255,255,255,0.025)",border:"0.5px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"18px 20px"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#8a8a95",lineHeight:1.8,fontStyle:"italic"}}>
+              "We're not building the next SaaS platform. We're building the right workspace for every team that needs one. That's a different kind of scale and a better one."
+            </p>
+          </div>
+          <button className="pbtn accentbtn" style={{width:"100%",textAlign:"center"}}
+            onClick={()=>{onClose();onContact();}}>
+            Tell us about yourself
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ─── Investor Modal ───────────────────────────────────────────────────────────
+
+function InvestorModal({onClose}) {
+  const [form, setForm] = useState({name:"",email:"",org:"",role:"",stage:"",bring:"",interest:"",source:""});
+  const [phase, setPhase] = useState("form");
+
+  // ⚠️ Replace with your deployed Investor Apps Script URL
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwXeKDgyADLBIG5rXoMeX9Y6NshWS4Mcu8v0m805bCnLsTDzAt5p06KA04EY7ys4x43Xw/exec";
+
+  const upd = e => setForm(f=>({...f,[e.target.name]:e.target.value}));
+
+  const submit = async e => {
+    e.preventDefault();
+    setPhase("submitting");
+    try {
+      fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({...form,submittedAt:new Date().toISOString()})});
+    } catch(_){}
+    setTimeout(()=>setPhase("success"),900);
+  };
+
+  const lbl = {fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#5a5a62",letterSpacing:"0.1em",marginBottom:6,display:"block"};
+  const ROLES = ["Angel Investor","Venture Capital","Strategic Partner","Corporate Investor","Advisor","Other"];
+  const STAGES = ["Pre-seed","Seed","Series A+","Strategic / No capital"];
+
+  return (
+    <>
+      <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.68)",zIndex:80,animation:"backdropIn 0.3s ease",cursor:"pointer"}}/>
+      <div style={{position:"fixed",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:"min(540px,95vw)",maxHeight:"92vh",background:"linear-gradient(160deg,#111116 0%,#0c0c10 100%)",border:"0.5px solid rgba(251,191,36,0.14)",borderRadius:16,zIndex:90,display:"flex",flexDirection:"column",animation:"modalIn 0.38s cubic-bezier(0.34,1.56,0.64,1) both",boxShadow:"0 60px 120px rgba(0,0,0,0.85)",overflowY:"auto"}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"20px 28px 18px",borderBottom:"0.5px solid rgba(255,255,255,0.06)",flexShrink:0,position:"sticky",top:0,background:"linear-gradient(160deg,#111116 0%,#0c0c10 100%)",zIndex:1}}>
+          <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <div style={{width:6,height:6,borderRadius:"50%",background:"#fbbf24"}}/>
+            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#fbbf24",letterSpacing:"0.12em"}}>INVESTOR & PARTNER ENQUIRY</span>
+          </div>
+          <button onClick={onClose} style={{background:"none",border:"none",color:"#5a5a62",cursor:"pointer",fontSize:18,padding:"4px 8px",transition:"color 0.18s",lineHeight:1}}
+            onMouseEnter={e=>e.currentTarget.style.color="#ece9e4"}
+            onMouseLeave={e=>e.currentTarget.style.color="#5a5a62"}>✕</button>
+        </div>
+
+        {phase==="success" ? (
+          <div style={{padding:"56px 28px",textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",gap:22,animation:"fadeUp 0.4s ease"}}>
+            <div style={{width:58,height:58,borderRadius:"50%",background:"rgba(251,191,36,0.08)",border:"0.5px solid rgba(251,191,36,0.3)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+              <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:22,color:"#fbbf24"}}>✓</span>
+            </div>
+            <div>
+              <h3 style={{fontFamily:"'Syne',sans-serif",fontSize:20,fontWeight:700,color:"#ece9e4",marginBottom:10,letterSpacing:"-0.01em"}}>We've got your details.</h3>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#6b6b72",lineHeight:1.85,maxWidth:320,margin:"0 auto"}}>
+                We'll review what you shared and be in touch within <span style={{color:"#fbbf24"}}>3 business days</span>. Looking forward to the conversation.
+              </p>
+            </div>
+            <button className="pbtn accentbtn" onClick={onClose} style={{marginTop:4}}>Close</button>
+          </div>
+        ) : (
+          <form onSubmit={submit} style={{padding:"24px 28px 32px",display:"flex",flexDirection:"column",gap:16}}>
+            <div style={{background:"rgba(251,191,36,0.04)",border:"0.5px solid rgba(251,191,36,0.14)",borderRadius:10,padding:"14px 16px"}}>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#6b6b72",lineHeight:1.8,margin:0}}>
+                We're growing a hands-on team and looking for investors and partners who want to increase our volume and help us reach our best for our customers. Tell us a bit about yourself.
+                <span style={{display:"block",fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#fbbf24",marginTop:8,letterSpacing:"0.09em"}}>↳ WE RESPOND WITHIN 3 BUSINESS DAYS</span>
+              </p>
+            </div>
+
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+              <div>
+                <label style={lbl}>FULL NAME *</label>
+                <input required name="name" value={form.name} onChange={upd} placeholder="Jane Smith" className="cinput"/>
+              </div>
+              <div>
+                <label style={lbl}>EMAIL *</label>
+                <input required type="email" name="email" value={form.email} onChange={upd} placeholder="jane@fund.com" className="cinput"/>
+              </div>
+            </div>
+
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+              <div>
+                <label style={lbl}>ORGANIZATION / FUND *</label>
+                <input required name="org" value={form.org} onChange={upd} placeholder="Fund name, company..." className="cinput"/>
+              </div>
+              <div>
+                <label style={lbl}>YOUR ROLE *</label>
+                <select required name="role" value={form.role} onChange={upd} className="cinput" style={{cursor:"pointer"}}>
+                  <option value="">Select...</option>
+                  {ROLES.map(r=><option key={r} value={r}>{r}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label style={lbl}>INVESTMENT STAGE FOCUS *</label>
+              <select required name="stage" value={form.stage} onChange={upd} className="cinput" style={{cursor:"pointer"}}>
+                <option value="">Select...</option>
+                {STAGES.map(s=><option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+
+            <div>
+              <label style={lbl}>WHAT YOU BRING BEYOND CAPITAL <span style={{color:"#3a3a42"}}>(optional)</span></label>
+              <textarea name="bring" value={form.bring} onChange={upd}
+                placeholder="e.g. network in B2B SaaS, experience scaling ops teams, portfolio synergies..."
+                className="cinput" style={{minHeight:78,lineHeight:1.65}}/>
+            </div>
+
+            <div>
+              <label style={lbl}>WHY DOES THE NEW ERA OF WORK INTEREST YOU? *</label>
+              <textarea required name="interest" value={form.interest} onChange={upd}
+                placeholder="e.g. I've seen firsthand how broken internal tooling kills productivity. This is the right approach at the right time..."
+                className="cinput" style={{minHeight:78,lineHeight:1.65}}/>
+            </div>
+
+            <div>
+              <label style={lbl}>HOW DID YOU FIND US? <span style={{color:"#3a3a42"}}>(optional)</span></label>
+              <input name="source" value={form.source} onChange={upd} placeholder="LinkedIn, referral, event..." className="cinput"/>
+            </div>
+
+            <button type="submit" className="pbtn accentbtn" disabled={phase==="submitting"}
+              style={{width:"100%",textAlign:"center",marginTop:4}}>
+              {phase==="submitting" ? "Sending..." : "Submit enquiry"}
+            </button>
+            <p style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#2a2a3a",textAlign:"center",letterSpacing:"0.06em"}}>All information is kept strictly confidential.</p>
+          </form>
+        )}
+      </div>
+    </>
+  );
+}
+
 // ─── About Panel ──────────────────────────────────────────────────────────────
 
-function AboutPanel({onClose}) {
+function AboutPanel({onClose, onContact}) {
   return (
     <>
       {/* Backdrop */}
@@ -694,7 +1234,6 @@ function AboutPanel({onClose}) {
         {/* Panel body */}
         <div style={{padding:"32px 28px 40px",display:"flex",flexDirection:"column",gap:28}}>
 
-          {/* Opening */}
           <div>
             <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:22,fontWeight:700,color:"#ece9e4",lineHeight:1.25,letterSpacing:"-0.01em",marginBottom:14}}>
               We build workspaces for teams who are ready to shape the way they work.
@@ -704,10 +1243,8 @@ function AboutPanel({onClose}) {
             </p>
           </div>
 
-          {/* Divider */}
           <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
 
-          {/* The honest truth */}
           <div>
             <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#a78bfa",letterSpacing:"0.12em",marginBottom:12}}>THE HONEST TRUTH</div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8,marginBottom:12}}>
@@ -718,10 +1255,8 @@ function AboutPanel({onClose}) {
             </p>
           </div>
 
-          {/* Divider */}
           <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
 
-          {/* Who we are */}
           <div>
             <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7fffd4",letterSpacing:"0.12em",marginBottom:12}}>WHERE WE COME IN</div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8}}>
@@ -729,7 +1264,6 @@ function AboutPanel({onClose}) {
             </p>
           </div>
 
-          {/* Stats block */}
           <div style={{background:"rgba(127,255,212,0.04)",border:"0.5px solid rgba(127,255,212,0.12)",borderRadius:12,padding:"20px 22px"}}>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:16}}>
               {[{n:"9",label:"Workspaces built"},{n:"12",label:"First customers"}].map(s=>(
@@ -744,10 +1278,8 @@ function AboutPanel({onClose}) {
             </p>
           </div>
 
-          {/* Divider */}
           <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
 
-          {/* The offer */}
           <div>
             <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#fbbf24",letterSpacing:"0.12em",marginBottom:12}}>WHAT WE OFFER</div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8,marginBottom:12}}>
@@ -758,15 +1290,18 @@ function AboutPanel({onClose}) {
             </p>
           </div>
 
-          {/* Closing */}
           <div style={{background:"rgba(255,255,255,0.025)",border:"0.5px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"18px 20px"}}>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#8a8a95",lineHeight:1.8,fontStyle:"italic"}}>
               "We know it. We can do it. And we've done it. Now it's your turn, let's build something that actually fits the way your team works."
             </p>
           </div>
 
-          {/* CTA */}
-          <button className="pbtn" style={{width:"100%",textAlign:"center"}} onClick={onClose}>
+          {/* CTA — opens contact modal, closes about panel */}
+          <button
+            className="pbtn accentbtn"
+            style={{width:"100%",textAlign:"center"}}
+            onClick={()=>{ onClose(); onContact(); }}
+          >
             Start the conversation
           </button>
 
@@ -779,20 +1314,24 @@ function AboutPanel({onClose}) {
 // ─── Main App ─────────────────────────────────────────────────────────────────
 
 export default function App() {
-  const [step, setStep]           = useState(0);
-  const [dept, setDept]           = useState(null);
-  const [selectedTools, setST]    = useState([]);
-  const [isoPhase, setIsoPhase]   = useState(0);
-  const [revealPhase, setRP]      = useState(0);
-  const [taskPct, setTaskPct]     = useState(100);
-  const [growthPct, setGrowthPct] = useState(12);
-  const [graphPoints, setGP]      = useState([12]);
-  const [aboutOpen, setAboutOpen] = useState(false);
+  const [step, setStep]             = useState(0);
+  const [dept, setDept]             = useState(null);
+  const [selectedTools, setST]      = useState([]);
+  const [isoPhase, setIsoPhase]     = useState(0);
+  const [revealPhase, setRP]        = useState(0);
+  const [taskPct, setTaskPct]       = useState(100);
+  const [growthPct, setGrowthPct]   = useState(12);
+  const [graphPoints, setGP]        = useState([12]);
+  const [aboutOpen, setAboutOpen]   = useState(false);
+  const [contactOpen, setContact]   = useState(false);
+  const [investorOpen, setInvestorOpen] = useState(false);
+  const [investorForm, setInvestorForm] = useState(false);
 
-  // Step 2 → 3: handled inside StepToolSelect via onDone
+  const openContact = () => setContact(true);
+  const closeContact = () => setContact(false);
+
   const handleToolDone = (sel) => { setST(sel); setStep(3); };
 
-  // Step 4: iso animation, then live
   useEffect(()=>{
     if(step!==4) return;
     setRP(0); setIsoPhase(0);
@@ -801,7 +1340,6 @@ export default function App() {
     return()=>{ phases.forEach(clearTimeout); clearTimeout(transition); };
   },[step]);
 
-  // Live dashboard animation
   useEffect(()=>{
     if(step!==4||revealPhase!==1) return;
     setTaskPct(100); setGrowthPct(12); setGP([12]);
@@ -814,18 +1352,14 @@ export default function App() {
       setGP(p=>[...p.slice(-24),g]);
       if(tick>=20) clearInterval(iv);
     },160);
-    return()=>clearInterval(iv);
+    const prompt=setTimeout(()=>setContact(true),7000);
+    return()=>{ clearInterval(iv); clearTimeout(prompt); };
   },[step,revealPhase]);
 
   const reset=()=>{ setStep(0); setDept(null); setST([]); setIsoPhase(0); setRP(0); };
 
-  // Card width adapts per step
   const cardMaxW = step===4?"860px":step===3?"660px":"560px";
-
-  // Step progress labels
   const stepLabels = ["Select","Configure","Journey","Live"];
-  // step 0=landing, 1=dept, 2=tools, 3=journey, 4=live → progress 0-4
-  const progressStep = step; // maps naturally
 
   return (
     <>
@@ -839,15 +1373,19 @@ export default function App() {
         {/* HEADER */}
         <header style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 32px",height:54,flexShrink:0,borderBottom:"0.5px solid rgba(255,255,255,0.05)",position:"relative",zIndex:10}}>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
-            <div style={{width:22,height:22,borderRadius:6,background:"rgba(127,255,212,0.11)",border:"0.5px solid rgba(127,255,212,0.26)",display:"flex",alignItems:"center",justifyContent:"center"}}>
-              <div style={{width:7,height:7,background:"#7fffd4",borderRadius:2}}/>
-            </div>
+            <img
+              src="/favicon.svg"
+              alt="The New Era of Work logo"
+              style={{width:22,height:22,display:"block"}}
+            />
             <span style={{fontFamily:"'Syne',sans-serif",fontSize:14,fontWeight:600,color:"#ece9e4",letterSpacing:"0.02em"}}>The New Era of Work</span>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:14}}>
             {step>0&&<button className="rbtn" onClick={reset}>↩ restart</button>}
             <button className="abtn" onClick={()=>setAboutOpen(true)}>About us</button>
-            <button className="hcta">Get in Touch</button>
+            <button className="abtn" onClick={()=>setInvestorOpen(true)}>Become a partner</button>
+            {/* ── "Get in Touch" opens the contact modal ── */}
+            <button className="hcta" onClick={openContact}>Get in Touch</button>
           </div>
         </header>
 
@@ -879,7 +1417,6 @@ export default function App() {
 
           {/* Wizard card */}
           <div className="wcard" style={{width:"100%",maxWidth:cardMaxW,transition:"max-width 0.5s cubic-bezier(0.4,0,0.2,1)",animation:"fadeUp 0.6s 0.2s ease both"}}>
-            {/* Window chrome */}
             <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 18px",borderBottom:"0.5px solid rgba(255,255,255,0.05)"}}>
               <div style={{display:"flex",gap:6}}>
                 {["#ff5f57","#febc2e","#28c840"].map((c,i)=><div key={i} style={{width:9,height:9,borderRadius:"50%",background:c,opacity:0.8}}/>)}
@@ -931,15 +1468,33 @@ export default function App() {
         {/* FOOTER */}
         <footer style={{height:44,flexShrink:0,borderTop:"0.5px solid rgba(171, 79, 79, 0.04)",display:"flex",alignItems:"center",justifyContent:"center",gap:10,position:"relative",zIndex:10}}>
           <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#2a2a32"}}>Your unique workspace is 90 days away.</span>
-          <button style={{background:"transparent",border:"none",fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#8a8a95",cursor:"pointer",textDecoration:"underline",textDecorationColor:"rgba(253, 253, 253, 0.3)",textUnderlineOffset:3,padding:0}}
-            onMouseEnter={e=>e.currentTarget.style.color="#8a8a95"}
-            onMouseLeave={e=>e.currentTarget.style.color="#8a8a95"}>
+          {/* ── "Start the Conversation" opens the contact modal ── */}
+          <button
+            style={{background:"transparent",border:"none",fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#8a8a95",cursor:"pointer",textDecoration:"underline",textDecorationColor:"rgba(253, 253, 253, 0.3)",textUnderlineOffset:3,padding:0}}
+            onClick={openContact}
+          >
             Start the Conversation
           </button>
         </footer>
 
-        {/* ABOUT PANEL */}
-        {aboutOpen&&<AboutPanel onClose={()=>setAboutOpen(false)}/>}
+        {/* ABOUT PANEL — passes onContact so its CTA opens the modal */}
+        {aboutOpen && (
+          <AboutPanel
+            onClose={()=>setAboutOpen(false)}
+            onContact={openContact}
+          />
+        )}
+
+        {/* CONTACT MODAL */}
+        {contactOpen && (
+          <ContactModal
+            onClose={closeContact}
+            dept={dept}
+            selectedTools={selectedTools}
+          />
+        )}
+        {investorOpen && <InvestorPanel onClose={()=>setInvestorOpen(false)} onContact={()=>setInvestorForm(true)}/>}
+        {investorForm && <InvestorModal onClose={()=>setInvestorForm(false)}/>}
       </div>
     </>
   );
