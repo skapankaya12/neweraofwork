@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 
 try {
   const l = document.createElement("link");
@@ -6,6 +7,43 @@ try {
   l.href = "https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap";
   document.head.appendChild(l);
 } catch (e) {}
+
+// ─── Floating Paths Background ────────────────────────────────────────────────
+
+function FloatingPaths({ position }) {
+  const paths = Array.from({ length: 36 }, (_, i) => ({
+    id: i,
+    d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${380 - i * 5 * position} -${189 + i * 6} -${312 - i * 5 * position} ${216 - i * 6} ${152 - i * 5 * position} ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${684 - i * 5 * position} ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
+    opacity: 0.06 + i * 0.012,
+    width: 0.4 + i * 0.03,
+  }));
+  return (
+    <div style={{position:"absolute",inset:0,pointerEvents:"none",overflow:"hidden"}}>
+      <svg style={{width:"100%",height:"100%"}} viewBox="0 0 696 316" fill="none" preserveAspectRatio="xMidYMid slice">
+        {paths.map((path) => (
+          <motion.path
+            key={path.id}
+            d={path.d}
+            stroke="#7fffd4"
+            strokeWidth={path.width}
+            strokeOpacity={path.opacity}
+            initial={{ pathLength: 0.3, opacity: 0.4 }}
+            animate={{
+              pathLength: 1,
+              opacity: [0.2, path.opacity, 0.2],
+              pathOffset: [0, 1, 0],
+            }}
+            transition={{
+              duration: 20 + (path.id % 10),
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          />
+        ))}
+      </svg>
+    </div>
+  );
+}
 
 const CSS = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -494,7 +532,7 @@ function StepToolSelect({dept, onDone}) {
           </div>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:14}}>
             <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:selected.length>=2?"#7fffd4":"#3a3a42",transition:"color 0.3s"}}>
-              {selected.length === 0 ? "none selected" : selected.length === 1 ? "1 selected — pick one more" : `${selected.length} selected`}
+              {selected.length === 0 ? "none selected" : selected.length === 1 ? "1 selected, pick one more" : `${selected.length} selected`}
             </span>
             {selected.length >= 2 && (
               <button className="pbtn" onClick={handleContinue} style={{fontSize:12,padding:"9px 20px",animation:"fadeUp 0.3s ease"}}>
@@ -837,7 +875,7 @@ function ContactModal({onClose, dept, selectedTools}) {
               </h3>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#6b6b72",lineHeight:1.85,maxWidth:320,margin:"0 auto"}}>
                 We've got everything we need. Expect to hear from us within{" "}
-                <span style={{color:"#7fffd4"}}>3 business days</span> — we'll review what you shared and come to the conversation fully prepared.
+                <span style={{color:"#7fffd4"}}>3 business days</span>, we'll review what you shared and come to the conversation fully prepared.
               </p>
             </div>
             <div
@@ -869,7 +907,7 @@ function ContactModal({onClose, dept, selectedTools}) {
             >
               {dept ? (
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#6b6b72",lineHeight:1.8,margin:0}}>
-                  We already have a sense of where you're headed —{" "}
+                  We already have a sense of where you're headed,{" "}
                   <span style={{color:"#ece9e4",fontWeight:500}}>{dept.label}</span>
                   {exploredToolLabels.length > 0 && (
                     <> with tools like <span style={{color:"#ece9e4"}}>{exploredToolLabels.join(", ")}</span></>
@@ -1209,6 +1247,250 @@ function InvestorModal({onClose}) {
   );
 }
 
+// ─── Case Studies Panel ───────────────────────────────────────────────────────
+
+const CASES = [
+  {
+    id:"ops",
+    tag:"Operations",
+    tagColor:"#7fffd4",
+    situation:"A 60-person logistics company was spending 3 days a week manually matching freight invoices to purchase orders across 4 different systems. The process ran on spreadsheets, tribal knowledge, and one person who knew where everything lived.",
+    found:"When we went inside, we discovered the matching logic was actually consistent, the same rules, every time. The only reason a human was doing it was because nobody had ever mapped it out end to end.",
+    built:"A custom AI agent that handles invoice-to-PO matching automatically, flags exceptions for human review, and generates a daily exceptions report. Took 6 weeks from discovery to live.",
+    result:"3 days of weekly ops work → under 2 hours. The team now handles exceptions only. The person who ran the old process moved to higher-leverage work.",
+  },
+  {
+    id:"growth",
+    tag:"Growth",
+    tagColor:"#a78bfa",
+    situation:"A B2B SaaS company had a sales team of 8 people manually triaging inbound leads, reading every submission, categorizing intent, and routing to the right rep. Response times averaged 6-9 hours.",
+    found:"The routing criteria were buried in a Notion doc that half the team had never read. Intent signals were obvious once written down, company size, role, and two or three keywords in the message determined 80% of routes.",
+    built:"An AI workflow that classifies inbound leads in real time, scores them, and routes directly to the right rep with a pre-drafted first response. Edge cases escalate to a shared queue.",
+    result:"Response time dropped from 6–9 hours to under 4 minutes on average. The sales team stopped doing triage and started doing sales.",
+  },
+  {
+    id:"finance",
+    tag:"Finance",
+    tagColor:"#fbbf24",
+    situation:"A professional services firm was generating client reports manually every month, pulling data from 3 tools, writing commentary, formatting in Word, sending for approval. Each report took 4-5 hours per client.",
+    found:"The data sources were consistent. The commentary followed a pattern. The bottleneck was assembly, nobody had connected the tools, and the formatting step was pure repetition.",
+    built:"An automated reporting agent that pulls data, generates structured commentary using context from the client relationship, assembles the report, and sends a formatted draft for partner review.",
+    result:"Report generation went from 4–5 hours to 20 minutes of partner review and send. The firm took on 40% more clients without adding headcount.",
+  },
+];
+
+// ── Case visualizations ───────────────────────────────────────────────────────
+
+function VizOps() {
+  // Before: 4 boxes (systems) → person → 3 days. After: AI agent → 2hrs
+  const before = ["ERP","TMS","Email","Sheets"];
+  return (
+    <div style={{background:"rgba(255,255,255,0.02)",border:"0.5px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"18px 20px"}}>
+      <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#5a5a62",letterSpacing:"0.1em",marginBottom:14}}>BEFORE VS AFTER</div>
+      {/* BEFORE */}
+      <div style={{marginBottom:14}}>
+        <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:8,color:"#3a3a42",letterSpacing:"0.1em",marginBottom:8}}>BEFORE</div>
+        <div style={{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap"}}>
+          {before.map(s=>(
+            <div key={s} style={{background:"rgba(255,255,255,0.04)",border:"0.5px solid rgba(255,255,255,0.08)",borderRadius:6,padding:"4px 8px",fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#5a5a62"}}>{s}</div>
+          ))}
+          <div style={{color:"#3a3a42",fontSize:11}}>→</div>
+          <div style={{background:"rgba(255,255,255,0.04)",border:"0.5px solid rgba(255,255,255,0.08)",borderRadius:6,padding:"4px 8px",fontFamily:"'DM Sans',sans-serif",fontSize:9,color:"#5a5a62"}}>1 person</div>
+          <div style={{color:"#3a3a42",fontSize:11}}>→</div>
+          <div style={{background:"rgba(130,38,30,0.15)",border:"0.5px solid rgba(130,38,30,0.3)",borderRadius:6,padding:"4px 10px",fontFamily:"'Syne',sans-serif",fontSize:10,fontWeight:700,color:"#e06050"}}>3 days / week</div>
+        </div>
+      </div>
+      <div style={{height:"0.5px",background:"rgba(255,255,255,0.05)",marginBottom:14}}/>
+      {/* AFTER */}
+      <div>
+        <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:8,color:"#3a3a42",letterSpacing:"0.1em",marginBottom:8}}>AFTER</div>
+        <div style={{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap"}}>
+          {before.map(s=>(
+            <div key={s} style={{background:"rgba(255,255,255,0.04)",border:"0.5px solid rgba(255,255,255,0.08)",borderRadius:6,padding:"4px 8px",fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#5a5a62"}}>{s}</div>
+          ))}
+          <div style={{color:"#3a3a42",fontSize:11}}>→</div>
+          <div style={{background:"rgba(127,255,212,0.08)",border:"0.5px solid rgba(127,255,212,0.3)",borderRadius:6,padding:"4px 10px",fontFamily:"'DM Sans',sans-serif",fontSize:9,color:"#7fffd4"}}>AI agent</div>
+          <div style={{color:"#3a3a42",fontSize:11}}>→</div>
+          <div style={{background:"rgba(127,255,212,0.12)",border:"0.5px solid rgba(127,255,212,0.4)",borderRadius:6,padding:"4px 10px",fontFamily:"'Syne',sans-serif",fontSize:10,fontWeight:700,color:"#7fffd4"}}>2 hrs / week</div>
+        </div>
+      </div>
+      {/* Saving callout */}
+      <div style={{marginTop:14,display:"flex",alignItems:"center",gap:8}}>
+        <div style={{flex:1,height:"0.5px",background:"rgba(127,255,212,0.1)"}}/>
+        <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#7fffd4",letterSpacing:"0.08em"}}>↓ 93% time saved</span>
+        <div style={{flex:1,height:"0.5px",background:"rgba(127,255,212,0.1)"}}/>
+      </div>
+    </div>
+  );
+}
+
+function VizGrowth() {
+  // Response time bars: Before 6-9h, After 4min
+  const bars = [
+    {label:"Before",val:100,display:"6-9 hours",color:"rgba(130,38,30,0.5)",border:"rgba(130,38,30,0.4)"},
+    {label:"After", val:1,  display:"4 minutes", color:"rgba(127,255,212,0.3)",border:"rgba(127,255,212,0.5)"},
+  ];
+  return (
+    <div style={{background:"rgba(255,255,255,0.02)",border:"0.5px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"18px 20px"}}>
+      <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#5a5a62",letterSpacing:"0.1em",marginBottom:14}}>RESPONSE TIME</div>
+      <div style={{display:"flex",flexDirection:"column",gap:10}}>
+        {bars.map(b=>(
+          <div key={b.label}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:5}}>
+              <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:8,color:"#3a3a42",letterSpacing:"0.1em"}}>{b.label.toUpperCase()}</span>
+              <span style={{fontFamily:"'Syne',sans-serif",fontSize:11,fontWeight:700,color:b.val===1?"#7fffd4":"#e06050"}}>{b.display}</span>
+            </div>
+            <div style={{height:10,background:"rgba(255,255,255,0.04)",borderRadius:4,overflow:"hidden"}}>
+              <div style={{height:"100%",width:`${b.val}%`,minWidth:b.val<5?"4px":undefined,background:b.color,border:`0.5px solid ${b.border}`,borderRadius:4,transition:"width 1s ease"}}/>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div style={{marginTop:14,display:"flex",gap:8}}>
+        {["Prospect","Qualified","Routed","Drafted"].map((s,i)=>(
+          <div key={s} style={{flex:1,textAlign:"center"}}>
+            <div style={{height:24,background:`rgba(167,139,250,${0.05+i*0.06})`,border:"0.5px solid rgba(167,139,250,0.2)",borderRadius:4,marginBottom:4}}/>
+            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:7,color:"#3a3a42",letterSpacing:"0.06em"}}>{s.toUpperCase()}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{marginTop:10,display:"flex",alignItems:"center",gap:8}}>
+        <div style={{flex:1,height:"0.5px",background:"rgba(167,139,250,0.1)"}}/>
+        <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#a78bfa",letterSpacing:"0.08em"}}>fully automated pipeline</span>
+        <div style={{flex:1,height:"0.5px",background:"rgba(167,139,250,0.1)"}}/>
+      </div>
+    </div>
+  );
+}
+
+function VizFinance() {
+  // Time per report comparison + capacity
+  const steps = ["Pull data","Write commentary","Format doc","Send for approval"];
+  return (
+    <div style={{background:"rgba(255,255,255,0.02)",border:"0.5px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"18px 20px"}}>
+      <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#5a5a62",letterSpacing:"0.1em",marginBottom:14}}>TIME PER REPORT</div>
+      <div style={{display:"flex",gap:12,marginBottom:14}}>
+        <div style={{flex:1,background:"rgba(130,38,30,0.1)",border:"0.5px solid rgba(130,38,30,0.25)",borderRadius:8,padding:"12px 14px",textAlign:"center"}}>
+          <div style={{fontFamily:"'Syne',sans-serif",fontSize:22,fontWeight:800,color:"#e06050",lineHeight:1}}>4-5</div>
+          <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:10,color:"#5a5a62",marginTop:4}}>hours before</div>
+        </div>
+        <div style={{display:"flex",alignItems:"center",color:"#3a3a42",fontSize:16}}>→</div>
+        <div style={{flex:1,background:"rgba(251,191,36,0.08)",border:"0.5px solid rgba(251,191,36,0.3)",borderRadius:8,padding:"12px 14px",textAlign:"center"}}>
+          <div style={{fontFamily:"'Syne',sans-serif",fontSize:22,fontWeight:800,color:"#fbbf24",lineHeight:1}}>20</div>
+          <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:10,color:"#5a5a62",marginTop:4}}>min review</div>
+        </div>
+      </div>
+      <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:8,color:"#3a3a42",letterSpacing:"0.1em",marginBottom:8}}>OLD WORKFLOW</div>
+      <div style={{display:"flex",gap:4,marginBottom:14}}>
+        {steps.map((s,i)=>(
+          <div key={s} style={{flex:1,background:"rgba(255,255,255,0.03)",border:"0.5px solid rgba(255,255,255,0.07)",borderRadius:5,padding:"6px 4px",textAlign:"center"}}>
+            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:7,color:"#4a4a52",lineHeight:1.4}}>{s.split(" ").map((w,j)=><div key={j}>{w}</div>)}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{display:"flex",alignItems:"center",gap:8}}>
+        <div style={{flex:1,height:"0.5px",background:"rgba(251,191,36,0.15)"}}/>
+        <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#fbbf24",letterSpacing:"0.08em"}}>+40% client capacity, same team</span>
+        <div style={{flex:1,height:"0.5px",background:"rgba(251,191,36,0.15)"}}/>
+      </div>
+    </div>
+  );
+}
+
+const CASE_VIZ = { ops: VizOps, growth: VizGrowth, finance: VizFinance };
+
+function CaseStudiesPanel({onClose, onContact}) {
+  const [active, setActive] = useState(null);
+  const c = active ? CASES.find(x=>x.id===active) : null;
+  const Viz = active ? CASE_VIZ[active] : null;
+
+  return (
+    <>
+      <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.55)",zIndex:40,animation:"backdropIn 0.3s ease",cursor:"pointer"}}/>
+      <div style={{position:"fixed",top:0,right:0,width:"min(520px,100vw)",height:"100vh",background:"linear-gradient(180deg,#0f0f14 0%,#0a0a0d 100%)",borderLeft:"0.5px solid rgba(255,255,255,0.08)",zIndex:50,display:"flex",flexDirection:"column",animation:"slidePanel 0.38s cubic-bezier(0.32,0.72,0,1)",overflowY:"auto"}}>
+
+        {/* Header */}
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"20px 28px 18px",borderBottom:"0.5px solid rgba(255,255,255,0.06)",flexShrink:0}}>
+          <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <div style={{width:6,height:6,borderRadius:"50%",background:"#7fffd4"}}/>
+            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7fffd4",letterSpacing:"0.12em"}}>CASE STUDIES</span>
+          </div>
+          <button onClick={()=>active?setActive(null):onClose()} style={{background:"none",border:"none",color:"#5a5a62",cursor:"pointer",fontSize:18,lineHeight:1,padding:"4px 8px",transition:"color 0.18s"}}
+            onMouseEnter={e=>e.currentTarget.style.color="#ece9e4"}
+            onMouseLeave={e=>e.currentTarget.style.color="#5a5a62"}>{active?"← back":"✕"}</button>
+        </div>
+
+        <div style={{padding:"32px 28px 40px",display:"flex",flexDirection:"column",gap:24}}>
+
+          {!active && (<>
+            <div>
+              <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:20,fontWeight:700,color:"#ece9e4",lineHeight:1.25,letterSpacing:"-0.01em",marginBottom:10}}>
+                What it looks like when we go inside.
+              </h2>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#6b6b72",lineHeight:1.8}}>
+                Every engagement starts with us learning how your business actually works. These are real situations, the problems we found, what we built, and what changed.
+              </p>
+            </div>
+
+            <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
+
+            {CASES.map(cs=>(
+              <button key={cs.id} onClick={()=>setActive(cs.id)}
+                style={{background:"rgba(255,255,255,0.02)",border:"0.5px solid rgba(255,255,255,0.07)",borderRadius:12,padding:"20px 22px",textAlign:"left",cursor:"pointer",transition:"all 0.18s",fontFamily:"'DM Sans',sans-serif"}}
+                onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,0.05)";e.currentTarget.style.borderColor=cs.tagColor.replace(")",",0.3)").replace("rgb","rgba");}}
+                onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,0.02)";e.currentTarget.style.borderColor="rgba(255,255,255,0.07)";}}>
+                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
+                  <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:cs.tagColor,letterSpacing:"0.12em"}}>{cs.tag.toUpperCase()}</span>
+                  <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:cs.tagColor,letterSpacing:"0.08em"}}>view case →</span>
+                </div>
+                <p style={{fontSize:13,color:"#6b6b72",lineHeight:1.75,margin:"0 0 12px"}}>{cs.situation.slice(0,120)}…</p>
+                <div style={{display:"flex",alignItems:"center",gap:6,paddingTop:10,borderTop:"0.5px solid rgba(255,255,255,0.05)"}}>
+                  <div style={{width:4,height:4,borderRadius:"50%",background:cs.tagColor,opacity:0.6}}/>
+                  <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:8,color:"#3a3a42",letterSpacing:"0.08em"}}>CLICK TO SEE WHAT WE FOUND + BUILT</span>
+                </div>
+              </button>
+            ))}
+
+            <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
+
+            <button className="pbtn accentbtn" style={{width:"100%",textAlign:"center"}} onClick={()=>{onClose();onContact();}}>
+              Talk about your operations
+            </button>
+          </>)}
+
+          {active && c && Viz && (<>
+            <div style={{display:"inline-flex",alignItems:"center",gap:6}}>
+              <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:c.tagColor,letterSpacing:"0.12em"}}>{c.tag.toUpperCase()}</span>
+            </div>
+
+            {/* Visualization */}
+            <Viz />
+
+            {[
+              {label:"THE SITUATION", text:c.situation, color:"#5a5a62"},
+              {label:"WHAT WE FOUND", text:c.found, color:"#a78bfa"},
+              {label:"WHAT WE BUILT", text:c.built, color:"#7fffd4"},
+              {label:"WHAT CHANGED",  text:c.result, color:"#fbbf24"},
+            ].map(({label,text,color})=>(
+              <div key={label}>
+                <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color,letterSpacing:"0.12em",marginBottom:10}}>{label}</div>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#6b6b72",lineHeight:1.85,margin:0}}>{text}</p>
+              </div>
+            ))}
+
+            <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
+
+            <button className="pbtn accentbtn" style={{width:"100%",textAlign:"center"}} onClick={()=>{onClose();onContact();}}>
+              Talk about your operations
+            </button>
+          </>)}
+
+        </div>
+      </div>
+    </>
+  );
+}
+
 // ─── About Panel ──────────────────────────────────────────────────────────────
 
 function AboutPanel({onClose, onContact}) {
@@ -1236,37 +1518,73 @@ function AboutPanel({onClose, onContact}) {
 
           <div>
             <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:22,fontWeight:700,color:"#ece9e4",lineHeight:1.25,letterSpacing:"-0.01em",marginBottom:14}}>
-              We build workspaces for teams who are ready to shape the way they work.
+              We go inside companies, learn how they actually work, and build custom AI around it.
             </h2>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8}}>
-              Every team has their own rhythm, their own tools, their own chaos. The problem is that most software forces you to adapt to it, not the other way around. We believe that's backwards.
+              Every company has its own rhythm, its own bottlenecks, its own processes running on spreadsheets and institutional memory. We map the real thing, not the org-chart version, and build AI around it.
             </p>
           </div>
 
           <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
 
           <div>
-            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#a78bfa",letterSpacing:"0.12em",marginBottom:12}}>THE HONEST TRUTH</div>
+            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#a78bfa",letterSpacing:"0.12em",marginBottom:12}}>THE REAL PROBLEM</div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8,marginBottom:12}}>
-              Sometimes you just don't know how to put it together. And that's completely normal, not everyone knows what can be automated, or where things should go, or how to structure a workflow that actually holds up under pressure.
+              According to Deloitte's State of AI in the Enterprise report, the AI skills gap is the single biggest barrier to AI integration, and yet most companies are responding with education, not workflow redesign.
+            </p>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#8a8a95",lineHeight:1.8,marginBottom:12}}>
+              Sending your team to AI courses doesn't get workflows built. It doesn't identify what's broken. It doesn't produce agents that actually run your operations better.
+            </p>
+            <a
+              href="https://www.deloitte.com/us/en/what-we-do/capabilities/applied-artificial-intelligence/content/state-of-ai-in-the-enterprise.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#a78bfa",letterSpacing:"0.08em",textDecoration:"none",borderBottom:"0.5px solid rgba(167,139,250,0.35)",paddingBottom:1,transition:"color 0.18s"}}
+            >↗ Deloitte · State of AI in the Enterprise 2026</a>
+          </div>
+
+          <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
+
+          <div>
+            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7fffd4",letterSpacing:"0.12em",marginBottom:12}}>WHAT IS FORWARD DEPLOYED ENGINEERING</div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8,marginBottom:12}}>
+              Forward Deployed Engineering is one of the fastest-growing roles in tech. A Forward Deployed Engineer (FDE) embeds directly inside a customer's business, learns how it actually operates, and builds solutions around the real problems, not the ones assumed from the outside.
+            </p>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#8a8a95",lineHeight:1.8,marginBottom:12}}>
+              Salesforce called it "today's hottest role." Job postings for FDEs grew over 800% in 2025 alone. It's the model that works when complexity is high and off-the-shelf doesn't cut it. That's exactly how On Forward operates.
+            </p>
+            <a
+              href="https://www.salesforce.com/blog/forward-deployed-engineer/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7fffd4",letterSpacing:"0.08em",textDecoration:"none",borderBottom:"0.5px solid rgba(127,255,212,0.35)",paddingBottom:1,transition:"color 0.18s"}}
+            >↗ Salesforce · Forward Deployed Engineer: 5 Skills for This New Role</a>
+          </div>
+
+          <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
+
+          <div>
+            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7fffd4",letterSpacing:"0.12em",marginBottom:12}}>WE TRANSLATE</div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8}}>
+              We are the people who can sit between AI capability and real business problems and make them speak the same language. We understand both sides, and we build the bridge.
+            </p>
+          </div>
+
+          <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
+
+          <div>
+            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#fbbf24",letterSpacing:"0.12em",marginBottom:12}}>HOW WE WORK</div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8,marginBottom:12}}>
+              We embed with your team. We ask the right questions and map how your operations actually run, not the org-chart version, the real version. Then we find what's underautomated, what's broken, what's eating hours that don't need to be eaten.
             </p>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#8a8a95",lineHeight:1.8}}>
-              It takes real experience to build something that fits. You need to have built a few of these to know what works and what doesn't. We have.
-            </p>
-          </div>
-
-          <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
-
-          <div>
-            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7fffd4",letterSpacing:"0.12em",marginBottom:12}}>WHERE WE COME IN</div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8}}>
-              We enter exactly at that point, when you know something needs to change but you're not sure where to start. We ask the right questions. We map how your team actually works, not how you think it does on paper. Then we build.
+              Then we build. Custom AI workflows and agents designed specifically around those gaps. Not generic. Not off-the-shelf. Yours, and it stays yours after we're done.
             </p>
           </div>
 
           <div style={{background:"rgba(127,255,212,0.04)",border:"0.5px solid rgba(127,255,212,0.12)",borderRadius:12,padding:"20px 22px"}}>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:16}}>
-              {[{n:"9",label:"Workspaces built"},{n:"12",label:"First customers"}].map(s=>(
+              {[{n:"9",label:"Engagements completed"},{n:"12",label:"Early clients"}].map(s=>(
                 <div key={s.label}>
                   <div style={{fontFamily:"'Syne',sans-serif",fontSize:28,fontWeight:800,color:"#7fffd4",lineHeight:1}}>{s.n}</div>
                   <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#5a5a62",marginTop:4}}>{s.label}</div>
@@ -1274,25 +1592,13 @@ function AboutPanel({onClose, onContact}) {
               ))}
             </div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#6b6b72",lineHeight:1.75}}>
-              Our first 12 customers were brave. They chose to bet on technology early, to raise their game before it became obvious. Nine workspaces built, nine teams that now work differently than they did before.
-            </p>
-          </div>
-
-          <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
-
-          <div>
-            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#fbbf24",letterSpacing:"0.12em",marginBottom:12}}>WHAT WE OFFER</div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8,marginBottom:12}}>
-              Let us get our hands dirty on your setup. We'll build it right and then you use it forever. It's yours.
-            </p>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#8a8a95",lineHeight:1.8}}>
-              And we don't disappear after launch. As your team grows, changes direction, hires new people, or just needs a tweak, we're here. Support to adapt, evolve, troubleshoot, and keep everything working the way it should.
+              Our first clients were early movers. They let us inside before it was obvious. Every engagement produced something custom, AI that runs in their business today, built around how they actually operate.
             </p>
           </div>
 
           <div style={{background:"rgba(255,255,255,0.025)",border:"0.5px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"18px 20px"}}>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#8a8a95",lineHeight:1.8,fontStyle:"italic"}}>
-              "We know it. We can do it. And we've done it. Now it's your turn, let's build something that actually fits the way your team works."
+              "We go in. We learn how your business really works. We find what AI can fix. We build it. That's the whole model."
             </p>
           </div>
 
@@ -1322,10 +1628,11 @@ export default function App() {
   const [taskPct, setTaskPct]       = useState(100);
   const [growthPct, setGrowthPct]   = useState(12);
   const [graphPoints, setGP]        = useState([12]);
-  const [aboutOpen, setAboutOpen]   = useState(false);
-  const [contactOpen, setContact]   = useState(false);
-  const [investorOpen, setInvestorOpen] = useState(false);
-  const [investorForm, setInvestorForm] = useState(false);
+  const [aboutOpen, setAboutOpen]         = useState(false);
+  const [casesOpen, setCasesOpen]         = useState(false);
+  const [contactOpen, setContact]         = useState(false);
+  const [investorOpen, setInvestorOpen]   = useState(false);
+  const [investorForm, setInvestorForm]   = useState(false);
 
   const openContact = () => setContact(true);
   const closeContact = () => setContact(false);
@@ -1366,6 +1673,10 @@ export default function App() {
       <style>{CSS}</style>
       <div style={{height:"100vh",width:"100vw",overflow:"hidden",background:"#08080b",display:"flex",flexDirection:"column",fontFamily:"'DM Sans',sans-serif",position:"relative"}}>
 
+        {/* Floating paths bg */}
+        <FloatingPaths position={1} />
+        <FloatingPaths position={-1} />
+
         {/* Grid bg */}
         <div style={{position:"absolute",inset:0,pointerEvents:"none",backgroundImage:"linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px)",backgroundSize:"52px 52px",maskImage:"radial-gradient(ellipse 90% 90% at 50% 50%,black 20%,transparent 100%)"}}/>
         <div style={{position:"absolute",top:"8%",left:"50%",transform:"translateX(-50%)",width:700,height:500,background:"radial-gradient(ellipse,rgba(127,255,212,0.032) 0%,transparent 70%)",pointerEvents:"none"}}/>
@@ -1375,14 +1686,15 @@ export default function App() {
           <div style={{display:"flex",alignItems:"center",gap:10}}>
             <img
               src="/favicon.svg"
-              alt="The New Era of Work logo"
+              alt="On Forward logo"
               style={{width:22,height:22,display:"block"}}
             />
-            <span style={{fontFamily:"'Syne',sans-serif",fontSize:14,fontWeight:600,color:"#ece9e4",letterSpacing:"0.02em"}}>The New Era of Work</span>
+            <span style={{fontFamily:"'Syne',sans-serif",fontSize:14,fontWeight:600,color:"#ece9e4",letterSpacing:"0.02em"}}>On Forward</span>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:14}}>
             {step>0&&<button className="rbtn" onClick={reset}>↩ restart</button>}
             <button className="abtn" onClick={()=>setAboutOpen(true)}>About us</button>
+            <button className="abtn" onClick={()=>setCasesOpen(true)}>Case studies</button>
             <button className="abtn" onClick={()=>setInvestorOpen(true)}>Become a partner</button>
             {/* ── "Get in Touch" opens the contact modal ── */}
             <button className="hcta" onClick={openContact}>Get in Touch</button>
@@ -1394,23 +1706,23 @@ export default function App() {
 
           <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12,animation:"fadeUp 0.6s ease both"}}>
             <div style={{width:1,height:12,background:"rgba(130, 38, 30)"}}/>
-            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#3a3a42",letterSpacing:"0.14em"}}>When the world changes, you change with it.</span>
-            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#82261E",letterSpacing:"0.14em"}}> Change is constant; your adaptability is key. </span>
+            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#6b6b72",letterSpacing:"0.14em"}}>The AI skills gap is the #1 barrier to adoption.</span>
+            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#82261E",letterSpacing:"0.14em"}}> We close it. </span>
             <div style={{width:1,height:12,background:"rgba(130, 38, 30)"}}/>
           </div>
 
           {step===0&&(
             <div style={{textAlign:"center",marginBottom:26,animation:"fadeUp 0.7s 0.1s ease both"}}>
               <h1 style={{fontFamily:"'Syne',sans-serif",fontSize:"clamp(26px,4vw,48px)",fontWeight:800,color:"#ece9e4",lineHeight:1.15,letterSpacing:"-0.02em",marginBottom:14}}>
-                build your own workspace.<br/>
-                <span style={{color:"transparent",backgroundImage:"linear-gradient(90deg,#F0F5F3,#82261E)",backgroundClip:"text",WebkitBackgroundClip:"text"}}>set your automations.</span>
+                we go inside your business.<br/>
+                <span style={{color:"transparent",backgroundImage:"linear-gradient(90deg,#F0F5F3,#82261E)",backgroundClip:"text",WebkitBackgroundClip:"text"}}>and build AI systems around it.</span>
               </h1>
-              <p style={{fontSize:13,color:"#4a4a52",maxWidth:6000,margin:"0 auto 10px",lineHeight:1.75}}>
-                Regardless of who you are or what your team does, you deserve a workspace shaped exactly around your needs. No noise. No bloat. Just what you actually use.
+              <p style={{fontSize:13,color:"#ece9e4",maxWidth:560,margin:"0 auto 10px",lineHeight:1.75}}>
+                Most companies are trying to adopt AI through courses, tools, and strategy decks. That's not how it works. We embed with your team, map how your operations actually run, and build custom AI agents and workflows around the real thing.
               </p>
               <p style={{fontSize:13,color:"#5a5a62",maxWidth:380,margin:"0 auto",lineHeight:1.7}}>
-                A workspace built around your team, from discovery to live.{" "}
-                <span style={{color:"#F0F5F3"}}>Watch yours take shape.</span>
+                Not a platform. Not a template. Custom AI built for how your business actually works.{" "}
+                <span style={{color:"#F0F5F3"}}>See it take shape.</span>
               </p>
             </div>
           )}
@@ -1467,7 +1779,7 @@ export default function App() {
 
         {/* FOOTER */}
         <footer style={{height:44,flexShrink:0,borderTop:"0.5px solid rgba(171, 79, 79, 0.04)",display:"flex",alignItems:"center",justifyContent:"center",gap:10,position:"relative",zIndex:10}}>
-          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#2a2a32"}}>Your unique workspace is 90 days away.</span>
+          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#6b6b72"}}>Your custom AI solution starts with a conversation.</span>
           {/* ── "Start the Conversation" opens the contact modal ── */}
           <button
             style={{background:"transparent",border:"none",fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#8a8a95",cursor:"pointer",textDecoration:"underline",textDecorationColor:"rgba(253, 253, 253, 0.3)",textUnderlineOffset:3,padding:0}}
@@ -1481,6 +1793,14 @@ export default function App() {
         {aboutOpen && (
           <AboutPanel
             onClose={()=>setAboutOpen(false)}
+            onContact={openContact}
+          />
+        )}
+
+        {/* CASE STUDIES PANEL */}
+        {casesOpen && (
+          <CaseStudiesPanel
+            onClose={()=>setCasesOpen(false)}
             onContact={openContact}
           />
         )}

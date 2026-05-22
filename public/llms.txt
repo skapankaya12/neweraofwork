@@ -1,0 +1,31 @@
+# On Forward
+
+> On Forward is a Forward Deployed Engineering firm. We embed inside companies, learn how the business actually works, and build custom AI systems and agents around the real operations, not assumptions.
+
+## What we do
+
+- Forward Deployed Engineering (FDE): embedding with client teams to map real workflows
+- Custom AI system design and implementation for enterprise operations
+- AI workflow automation: identifying underautomated or broken processes and fixing them with purpose-built agents
+- AI translation: bridging the gap between AI capability and real business problems
+- Ongoing support and iteration after deployment
+
+## Who we work with
+
+Decision-makers at the executive and senior leadership level (C-suite, VPs, Directors of Operations, Growth, Finance, Product) who need AI implemented in their business, not just advised upon.
+
+## The problem we solve
+
+The AI skills gap is the #1 barrier to enterprise AI adoption (Deloitte, State of AI in the Enterprise 2026). Most companies respond with education and training, not workflow redesign. On Forward provides the implementation layer that education cannot: people who go inside, find what needs to change, and build systems that run.
+
+## What makes us different
+
+We are not a SaaS product. We are not a consulting firm that delivers strategy decks. We are the team that builds the actual thing, embedded in your business, using your real data, your real workflows, and your real constraints.
+
+## Key terms
+
+Forward Deployed Engineering, FDE, custom AI, AI agents, AI workflow automation, AI implementation, AI integration, enterprise AI, AI operations, business AI, AI for operations, AI for finance, AI for growth teams, AI for logistics, AI consultant, AI systems design
+
+## Contact
+
+onforward.io
