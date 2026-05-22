@@ -1714,7 +1714,7 @@ export default function App() {
           {step===0&&(
             <div style={{textAlign:"center",marginBottom:26,animation:"fadeUp 0.7s 0.1s ease both"}}>
               <h1 style={{fontFamily:"'Syne',sans-serif",fontSize:"clamp(26px,4vw,48px)",fontWeight:800,color:"#ece9e4",lineHeight:1.15,letterSpacing:"-0.02em",marginBottom:14}}>
-                we go inside your business.<br/>
+                we go inside your business<br/>
                 <span style={{color:"transparent",backgroundImage:"linear-gradient(90deg,#F0F5F3,#82261E)",backgroundClip:"text",WebkitBackgroundClip:"text"}}>and build AI systems around it.</span>
               </h1>
               <p style={{fontSize:13,color:"#ece9e4",maxWidth:560,margin:"0 auto 10px",lineHeight:1.75}}>
