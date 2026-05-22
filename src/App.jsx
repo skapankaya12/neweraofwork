@@ -1108,11 +1108,6 @@ function InvestorPanel({onClose, onContact}) {
               Teams everywhere are realizing their tools don't fit. They patch together software never designed for them, losing months to the wrong systems. The market for custom, human-first operational workspaces is wide open and we know how to build them.
             </p>
           </div>
-          <div style={{background:"rgba(255,255,255,0.025)",border:"0.5px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"18px 20px"}}>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#8a8a95",lineHeight:1.8,fontStyle:"italic"}}>
-              "We're not building the next SaaS platform. We're building the right workspace for every team that needs one. That's a different kind of scale and a better one."
-            </p>
-          </div>
           <button className="pbtn accentbtn" style={{width:"100%",textAlign:"center"}}
             onClick={()=>{onClose();onContact();}}>
             Tell us about yourself
@@ -1714,8 +1709,8 @@ export default function App() {
           {step===0&&(
             <div style={{textAlign:"center",marginBottom:26,animation:"fadeUp 0.7s 0.1s ease both"}}>
               <h1 style={{fontFamily:"'Syne',sans-serif",fontSize:"clamp(26px,4vw,48px)",fontWeight:800,color:"#ece9e4",lineHeight:1.15,letterSpacing:"-0.02em",marginBottom:14}}>
-                we go inside your business<br/>
-                <span style={{color:"transparent",backgroundImage:"linear-gradient(90deg,#F0F5F3,#82261E)",backgroundClip:"text",WebkitBackgroundClip:"text"}}>and build AI systems around it.</span>
+                The world moves forward.<br/>
+                <span style={{color:"transparent",backgroundImage:"linear-gradient(90deg,#F0F5F3,#82261E)",backgroundClip:"text",WebkitBackgroundClip:"text"}}>So should your business.</span>
               </h1>
               <p style={{fontSize:13,color:"#ece9e4",maxWidth:560,margin:"0 auto 10px",lineHeight:1.75}}>
                 Most companies are trying to adopt AI through courses, tools, and strategy decks. That's not how it works. We embed with your team, map how your operations actually run, and build custom AI agents and workflows around the real thing.
