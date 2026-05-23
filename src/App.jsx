@@ -9,6 +9,18 @@ try {
   document.head.appendChild(l);
 } catch (e) {}
 
+// ─── Mobile breakpoint hook ───────────────────────────────────────────────────
+
+function useIsMobile(bp=560){
+  const[m,setM]=useState(()=>typeof window!=='undefined'&&window.innerWidth<bp);
+  useEffect(()=>{
+    const fn=()=>setM(window.innerWidth<bp);
+    window.addEventListener('resize',fn);
+    return()=>window.removeEventListener('resize',fn);
+  },[bp]);
+  return m;
+}
+
 // ─── Floating Paths Background ────────────────────────────────────────────────
 
 function FloatingPaths({ position }) {
@@ -96,6 +108,14 @@ body{background:#08080b;}
 .live-scroll::-webkit-scrollbar-track{background:transparent;}
 .live-scroll::-webkit-scrollbar-thumb{background:rgba(127,255,212,0.2);border-radius:3px;}
 .live-scroll::-webkit-scrollbar-thumb:hover{background:rgba(127,255,212,0.4);}
+
+@media(max-width:560px){
+  .abtn{display:none!important;}
+  .hcta{font-size:12px;padding:7px 13px;}
+  .rbtn{font-size:10px;padding:5px 10px;letter-spacing:0.05em;}
+  .pbtn{padding:11px 20px;}
+  .dbtn{padding:10px 12px;}
+}
 `;
 
 
@@ -424,6 +444,7 @@ function MiniGraph({points}) {
 // ─── Step Components ──────────────────────────────────────────────────────────
 
 function StepDialogue({onSelect}) {
+  const isMobile=useIsMobile();
   const [typed,setTyped]=useState("");
   const [showOpts,setShowOpts]=useState(false);
   const full="Which department are we\nbuilding for today?";
@@ -434,13 +455,13 @@ function StepDialogue({onSelect}) {
     return()=>clearInterval(iv);
   },[]);
   return (
-    <div style={{padding:"28px 32px 24px",minHeight:340,display:"flex",flexDirection:"column",gap:18}}>
+    <div style={{padding:isMobile?"18px 18px 16px":"28px 32px 24px",minHeight:isMobile?280:340,display:"flex",flexDirection:"column",gap:isMobile?12:18}}>
       <div>
-        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:16}}>
+        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:isMobile?10:16}}>
           <div style={{width:6,height:6,borderRadius:"50%",background:"#7fffd4",animation:"pulse 1.6s infinite"}}/>
           <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:11,color:"#7fffd4",letterSpacing:"0.12em"}}>WORKSPACE SETUP</span>
         </div>
-        <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:18,color:"#ece9e4",lineHeight:1.6,minHeight:56,whiteSpace:"pre-line"}}>
+        <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:isMobile?15:18,color:"#ece9e4",lineHeight:1.5,minHeight:isMobile?44:56,whiteSpace:"pre-line"}}>
           {typed}<span style={{animation:"blink 1s infinite",opacity:typed.length<full.length?1:0}}>█</span>
         </div>
       </div>
@@ -481,6 +502,7 @@ function BounceDots({label}) {
 // ─── Step: Tool Select ────────────────────────────────────────────────────────
 
 function StepToolSelect({dept, onDone}) {
+  const isMobile=useIsMobile();
   const [selected, setSelected] = useState([]);
   const [loading, setLoading] = useState(false);
   const selectedRef = useRef([]);
@@ -501,7 +523,7 @@ function StepToolSelect({dept, onDone}) {
   };
 
   return (
-    <div style={{padding:"28px 32px 24px",minHeight:380}}>
+    <div style={{padding:isMobile?"18px 18px 16px":"28px 32px 24px",minHeight:isMobile?300:380}}>
       {!loading ? (
         <>
           <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
@@ -570,6 +592,7 @@ function StepToolSelect({dept, onDone}) {
 // ─── Step: Journey ────────────────────────────────────────────────────────────
 
 function StepJourney({dept, selectedTools, onContinue}) {
+  const isMobile=useIsMobile();
   const [visible, setVisible] = useState(0);
   const [showCta, setShowCta] = useState(false);
 
@@ -582,7 +605,7 @@ function StepJourney({dept, selectedTools, onContinue}) {
   const chosen = (DEPT_TOOLS[dept?.id]||DEPT_TOOLS.product).filter(t=>selectedTools.includes(t.id));
 
   return (
-    <div style={{padding:"28px 32px 24px",minHeight:400}}>
+    <div style={{padding:isMobile?"18px 18px 16px":"28px 32px 24px",minHeight:isMobile?320:400}}>
       <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}>
         <div style={{width:6,height:6,borderRadius:"50%",background:"#a78bfa",animation:"pulse 1.4s infinite"}}/>
         <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:11,color:"#a78bfa",letterSpacing:"0.12em"}}>YOUR 90-DAY JOURNEY</span>
@@ -1666,6 +1689,7 @@ export default function App() {
 
   const reset=()=>{ setStep(0); setDept(null); setST([]); setIsoPhase(0); setRP(0); };
 
+  const isMobile = useIsMobile();
   const cardMaxW = step===4?"860px":step===3?"660px":"560px";
   const stepLabels = ["Select","Configure","Journey","Live"];
 
@@ -1683,7 +1707,7 @@ export default function App() {
         <div style={{position:"absolute",top:"8%",left:"50%",transform:"translateX(-50%)",width:700,height:500,background:"radial-gradient(ellipse,rgba(127,255,212,0.032) 0%,transparent 70%)",pointerEvents:"none"}}/>
 
         {/* HEADER */}
-        <header style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 32px",height:54,flexShrink:0,borderBottom:"0.5px solid rgba(255,255,255,0.05)",position:"relative",zIndex:10}}>
+        <header style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:isMobile?"0 16px":"0 32px",height:isMobile?46:54,flexShrink:0,borderBottom:"0.5px solid rgba(255,255,255,0.05)",position:"relative",zIndex:10}}>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
             <img
               src="/favicon.svg"
@@ -1692,7 +1716,7 @@ export default function App() {
             />
             <span style={{fontFamily:"'Syne',sans-serif",fontSize:14,fontWeight:600,color:"#ece9e4",letterSpacing:"0.02em"}}>On Forward</span>
           </div>
-          <div style={{display:"flex",alignItems:"center",gap:14}}>
+          <div style={{display:"flex",alignItems:"center",gap:isMobile?8:14}}>
             {step>0&&<button className="rbtn" onClick={reset}>↩ restart</button>}
             <button className="abtn" onClick={()=>setAboutOpen(true)}>About us</button>
             <button className="abtn" onClick={()=>setCasesOpen(true)}>Case studies</button>
@@ -1703,39 +1727,43 @@ export default function App() {
         </header>
 
         {/* MAIN */}
-        <main style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"10px 24px",position:"relative",zIndex:5,overflow:"hidden"}}>
+        <main style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:isMobile?"6px 14px":"10px 24px",position:"relative",zIndex:5,overflow:"hidden"}}>
 
-          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12,animation:"fadeUp 0.6s ease both"}}>
+          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:isMobile?8:12,animation:"fadeUp 0.6s ease both"}}>
             <div style={{width:1,height:12,background:"rgba(130, 38, 30)"}}/>
-            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#6b6b72",letterSpacing:"0.14em"}}>The AI skills gap is the #1 barrier to adoption.</span>
-            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#82261E",letterSpacing:"0.14em"}}> We close it. </span>
+            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:isMobile?9:10,color:"#6b6b72",letterSpacing:isMobile?"0.08em":"0.14em"}}>The AI skills gap is the #1 barrier to adoption.</span>
+            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:isMobile?9:10,color:"#82261E",letterSpacing:isMobile?"0.08em":"0.14em"}}> We close it. </span>
             <div style={{width:1,height:12,background:"rgba(130, 38, 30)"}}/>
           </div>
 
           {step===0&&(
-            <div style={{textAlign:"center",marginBottom:26,animation:"fadeUp 0.7s 0.1s ease both"}}>
-              <h1 style={{fontFamily:"'Syne',sans-serif",fontSize:"clamp(26px,4vw,48px)",fontWeight:800,color:"#ece9e4",lineHeight:1.15,letterSpacing:"-0.02em",marginBottom:14}}>
+            <div style={{textAlign:"center",marginBottom:isMobile?12:26,animation:"fadeUp 0.7s 0.1s ease both"}}>
+              <h1 style={{fontFamily:"'Syne',sans-serif",fontSize:isMobile?"clamp(22px,6vw,32px)":"clamp(26px,4vw,48px)",fontWeight:800,color:"#ece9e4",lineHeight:isMobile?1.1:1.15,letterSpacing:"-0.02em",marginBottom:isMobile?8:14}}>
                 The world moves forward.<br/>
                 <span style={{color:"transparent",backgroundImage:"linear-gradient(90deg,#F0F5F3,#82261E)",backgroundClip:"text",WebkitBackgroundClip:"text"}}>So should your business.</span>
               </h1>
-              <p style={{fontSize:13,color:"#ece9e4",maxWidth:560,margin:"0 auto 10px",lineHeight:1.75}}>
-                Most companies are trying to adopt AI through courses, tools, and strategy decks. That's not how it works. We embed with your team, map how your operations actually run, and build custom AI agents and workflows around the real thing.
-              </p>
-              <p style={{fontSize:13,color:"#5a5a62",maxWidth:380,margin:"0 auto",lineHeight:1.7}}>
-                Not a platform. Not a template. Custom AI built for how your business actually works.{" "}
-                <span style={{color:"#F0F5F3"}}>See it take shape.</span>
+              {!isMobile && (
+                <p style={{fontSize:13,color:"#ece9e4",maxWidth:560,margin:"0 auto 10px",lineHeight:1.75}}>
+                  Most companies are trying to adopt AI through courses, tools, and strategy decks. That's not how it works. We embed with your team, map how your operations actually run, and build custom AI agents and workflows around the real thing.
+                </p>
+              )}
+              <p style={{fontSize:isMobile?12:13,color:isMobile?"#8a8a95":"#5a5a62",maxWidth:380,margin:"0 auto",lineHeight:1.65}}>
+                {isMobile
+                  ? <>Not a platform. Not a template. Custom AI built for how your business actually works. <span style={{color:"#F0F5F3"}}>See it take shape.</span></>
+                  : <>Not a platform. Not a template. Custom AI built for how your business actually works.{" "}<span style={{color:"#F0F5F3"}}>See it take shape.</span></>
+                }
               </p>
 
               {/* ── Live visitor counter — hidden at 0 (late night) ── */}
               {liveCount > 0 && (
-                <div style={{display:"flex",justifyContent:"center",marginTop:22,animation:"fadeUp 0.5s 0.35s ease both"}}>
-                  <div style={{display:"inline-flex",alignItems:"center",gap:10,background:"rgba(127,255,212,0.04)",border:"0.5px solid rgba(127,255,212,0.14)",borderRadius:24,padding:"9px 20px"}}>
+                <div style={{display:"flex",justifyContent:"center",marginTop:isMobile?12:22,animation:"fadeUp 0.5s 0.35s ease both"}}>
+                  <div style={{display:"inline-flex",alignItems:"center",gap:isMobile?7:10,background:"rgba(127,255,212,0.04)",border:"0.5px solid rgba(127,255,212,0.14)",borderRadius:24,padding:isMobile?"7px 14px":"9px 20px"}}>
                     <div style={{position:"relative",width:8,height:8,flexShrink:0}}>
                       <div style={{position:"absolute",inset:0,borderRadius:"50%",background:"#7fffd4",animation:"ripple 1.8s ease-out infinite"}}/>
                       <div style={{position:"absolute",inset:0,borderRadius:"50%",background:"#7fffd4"}}/>
                     </div>
-                    <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:11,color:"#7fffd4",letterSpacing:"0.07em"}}>
-                      <span style={{fontSize:14,fontWeight:600}}>{liveCount}</span>
+                    <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:isMobile?10:11,color:"#7fffd4",letterSpacing:"0.07em"}}>
+                      <span style={{fontSize:isMobile?12:14,fontWeight:600}}>{liveCount}</span>
                       {" "}{liveCount === 1 ? "person" : "people"} on this page right now
                     </span>
                   </div>
@@ -1761,7 +1789,7 @@ export default function App() {
             </div>
 
             {step===0&&(
-              <div style={{padding:"44px 40px",textAlign:"center",animation:"fadeIn 0.4s ease"}}>
+              <div style={{padding:isMobile?"24px 20px":"44px 40px",textAlign:"center",animation:"fadeIn 0.4s ease"}}>
                 <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:12,color:"#F0F5F3",marginBottom:24}}>Your workspace begins with a conversation.</div>
                 <button
                   className="pbtn"
@@ -1795,11 +1823,11 @@ export default function App() {
         </main>
 
         {/* FOOTER */}
-        <footer style={{height:44,flexShrink:0,borderTop:"0.5px solid rgba(171, 79, 79, 0.04)",display:"flex",alignItems:"center",justifyContent:"center",gap:10,position:"relative",zIndex:10}}>
-          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#6b6b72"}}>Your custom AI solution starts with a conversation.</span>
+        <footer style={{height:isMobile?38:44,flexShrink:0,borderTop:"0.5px solid rgba(171, 79, 79, 0.04)",display:"flex",alignItems:"center",justifyContent:"center",gap:isMobile?6:10,position:"relative",zIndex:10}}>
+          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:isMobile?11:12,color:"#6b6b72"}}>{isMobile?"Custom AI for your business.":"Your custom AI solution starts with a conversation."}</span>
           {/* ── "Start the Conversation" opens the contact modal ── */}
           <button
-            style={{background:"transparent",border:"none",fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#8a8a95",cursor:"pointer",textDecoration:"underline",textDecorationColor:"rgba(253, 253, 253, 0.3)",textUnderlineOffset:3,padding:0}}
+            style={{background:"transparent",border:"none",fontFamily:"'DM Sans',sans-serif",fontSize:isMobile?11:12,color:"#8a8a95",cursor:"pointer",textDecoration:"underline",textDecorationColor:"rgba(253, 253, 253, 0.3)",textUnderlineOffset:3,padding:0}}
             onClick={openContact}
           >
             Start the Conversation
