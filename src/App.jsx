@@ -1425,6 +1425,13 @@ function CaseStudiesPanel({onClose, onContact}) {
 
             <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
 
+            <div style={{display:"flex",alignItems:"flex-start",gap:10,background:"rgba(255,255,255,0.02)",border:"0.5px solid rgba(255,255,255,0.06)",borderRadius:10,padding:"12px 16px"}}>
+              <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:12,color:"#3a3a42",flexShrink:0,marginTop:1}}>⬡</span>
+              <p style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#3a3a42",lineHeight:1.7,margin:0,letterSpacing:"0.04em"}}>
+                Client names and logos aren't shown here. Every workspace we build is private to the team it was built for — they own it fully, and we keep it that way.
+              </p>
+            </div>
+
             {CASES.map(cs=>(
               <button key={cs.id} onClick={()=>setActive(cs.id)}
                 style={{background:"rgba(255,255,255,0.02)",border:"0.5px solid rgba(255,255,255,0.07)",borderRadius:12,padding:"20px 22px",textAlign:"left",cursor:"pointer",transition:"all 0.18s",fontFamily:"'DM Sans',sans-serif"}}
