@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { usePresence } from "./firebase";
 
 try {
   const l = document.createElement("link");
@@ -1058,7 +1059,7 @@ function CareersPanel({onClose, onContact}) {
       tag: "Sales",
       tagColor: "#7fffd4",
       short: "You'll be the first real conversation most of our clients have with us.",
-      detail: "You'll work with startups from mid to high-level size — the ones that are serious about actually changing how they operate, not just buying another tool.\n\nThis isn't enterprise sales. There's no playbook, no deck to read from. You'll listen, understand what's actually broken, and figure out whether we're the right fit. Honestly, sometimes we're not — and you'll say so.\n\nIf you know how to have a real conversation, move fast, and genuinely care about the people on the other side of the call, you'll feel right at home here.",
+      detail: "You'll work with startups from mid to high-level size, the ones that are serious about actually changing how they operate, not just buying another tool.\n\nThis isn't enterprise sales. There's no playbook, no deck to read from. You'll listen, understand what's actually broken, and figure out whether we're the right fit. Honestly, sometimes we're not, and you'll say so.\n\nIf you know how to have a real conversation, move fast, and genuinely care about the people on the other side of the call, you'll feel right at home here.",
     },
     {
       id: "fde",
@@ -1066,7 +1067,7 @@ function CareersPanel({onClose, onContact}) {
       tag: "Engineering · AI",
       tagColor: "#a78bfa",
       short: "You build the actual thing. The agent that runs, the workflow that ships.",
-      detail: "This is an AI developer role. You'll be embedded with clients, working directly on their operations — mapping workflows, building agents, wiring things together until they actually work.\n\nYou don't need a traditional background. We don't care where you went to school or what your LinkedIn looks like. What matters is what you've actually built with AI and how you think through problems.\n\nYou'll be working with LLMs, automations, integrations, and occasionally some pretty gnarly legacy processes. If you like figuring things out from scratch and shipping things that matter — this is it.",
+      detail: "This is an AI developer role. You'll be embedded with clients, working directly on their operations, mapping workflows, building agents, wiring things together until they actually work.\n\nYou don't need a traditional background. We don't care where you went to school or what your LinkedIn looks like. What matters is what you've actually built with AI and how you think through problems.\n\nYou'll be working with LLMs, automations, integrations, and occasionally some pretty gnarly legacy processes. If you like figuring things out from scratch and shipping things that matter, this is it.",
     },
   ];
 
@@ -1089,7 +1090,7 @@ function CareersPanel({onClose, onContact}) {
               We're growing fast. Come build with us.
             </h2>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8}}>
-              We're a small team doing serious work. Every client we take on, we commit to fully. If you want to be somewhere that actually ships things that change how people work — read on.
+              We're a small team doing serious work. Every client we take on, we commit to fully. If you want to be somewhere that actually ships things that change how people work, read on.
             </p>
           </div>
           <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
@@ -1181,7 +1182,7 @@ function CareerModal({onClose}) {
             <div>
               <h3 style={{fontFamily:"'Syne',sans-serif",fontSize:20,fontWeight:700,color:"#ece9e4",marginBottom:10,letterSpacing:"-0.01em"}}>Got it. We'll take a look.</h3>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#6b6b72",lineHeight:1.85,maxWidth:320,margin:"0 auto"}}>
-                We'll review what you shared and get back to you within <span style={{color:"#7fffd4"}}>a few days</span>. No automated responses — just real people.
+                We'll review what you shared and get back to you within <span style={{color:"#7fffd4"}}>a few days</span>. No automated responses, just real people.
               </p>
             </div>
             <button className="pbtn" onClick={onClose} style={{marginTop:4}}>Close</button>
@@ -1217,7 +1218,7 @@ function CareerModal({onClose}) {
             <div>
               <label style={lbl}>TELL US ABOUT A RECENT PROJECT WHERE YOU SOLVED A PROBLEM WITH AI *</label>
               <textarea required name="project" value={form.project} onChange={upd}
-                placeholder="What was the problem, what did you build, what happened? No need to dress it up — just tell us what you actually did."
+                placeholder="What was the problem, what did you build, what happened? No need to dress it up, just tell us what you actually did."
                 className="cinput" style={{minHeight:110,lineHeight:1.65}}/>
             </div>
 
@@ -1428,7 +1429,7 @@ function CaseStudiesPanel({onClose, onContact}) {
             <div style={{display:"flex",alignItems:"flex-start",gap:10,background:"rgba(255,255,255,0.02)",border:"0.5px solid rgba(255,255,255,0.06)",borderRadius:10,padding:"12px 16px"}}>
               <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:12,color:"#3a3a42",flexShrink:0,marginTop:1}}>⬡</span>
               <p style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#3a3a42",lineHeight:1.7,margin:0,letterSpacing:"0.04em"}}>
-                Client names and logos aren't shown here. Every workspace we build is private to the team it was built for — they own it fully, and we keep it that way.
+                Client names and logos aren't shown here. Every workspace we build is private to the team it was built for, they own it fully, and we keep it that way.
               </p>
             </div>
 
@@ -1632,6 +1633,8 @@ export default function App() {
   const [investorOpen, setInvestorOpen]   = useState(false);
   const [investorForm, setInvestorForm]   = useState(false);
 
+  const liveCount = usePresence();
+
   const openContact = () => setContact(true);
   const closeContact = () => setContact(false);
 
@@ -1722,6 +1725,22 @@ export default function App() {
                 Not a platform. Not a template. Custom AI built for how your business actually works.{" "}
                 <span style={{color:"#F0F5F3"}}>See it take shape.</span>
               </p>
+
+              {/* ── Live visitor counter — hidden at 0 (late night) ── */}
+              {liveCount > 0 && (
+                <div style={{display:"flex",justifyContent:"center",marginTop:22,animation:"fadeUp 0.5s 0.35s ease both"}}>
+                  <div style={{display:"inline-flex",alignItems:"center",gap:10,background:"rgba(127,255,212,0.04)",border:"0.5px solid rgba(127,255,212,0.14)",borderRadius:24,padding:"9px 20px"}}>
+                    <div style={{position:"relative",width:8,height:8,flexShrink:0}}>
+                      <div style={{position:"absolute",inset:0,borderRadius:"50%",background:"#7fffd4",animation:"ripple 1.8s ease-out infinite"}}/>
+                      <div style={{position:"absolute",inset:0,borderRadius:"50%",background:"#7fffd4"}}/>
+                    </div>
+                    <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:11,color:"#7fffd4",letterSpacing:"0.07em"}}>
+                      <span style={{fontSize:14,fontWeight:600}}>{liveCount}</span>
+                      {" "}{liveCount === 1 ? "person" : "people"} on this page right now
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
