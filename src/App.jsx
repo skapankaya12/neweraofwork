@@ -1046,17 +1046,38 @@ function ContactModal({onClose, dept, selectedTools}) {
   );
 }
 
-// ─── Investor Panel ───────────────────────────────────────────────────────────
+// ─── Careers Panel ───────────────────────────────────────────────────────────
 
-function InvestorPanel({onClose, onContact}) {
+function CareersPanel({onClose, onContact}) {
+  const [expanded, setExpanded] = useState(null);
+
+  const jobs = [
+    {
+      id: "ae",
+      title: "Account Executive",
+      tag: "Sales",
+      tagColor: "#7fffd4",
+      short: "You'll be the first real conversation most of our clients have with us.",
+      detail: "You'll work with startups from mid to high-level size — the ones that are serious about actually changing how they operate, not just buying another tool.\n\nThis isn't enterprise sales. There's no playbook, no deck to read from. You'll listen, understand what's actually broken, and figure out whether we're the right fit. Honestly, sometimes we're not — and you'll say so.\n\nIf you know how to have a real conversation, move fast, and genuinely care about the people on the other side of the call, you'll feel right at home here.",
+    },
+    {
+      id: "fde",
+      title: "Forward Deployed Engineer",
+      tag: "Engineering · AI",
+      tagColor: "#a78bfa",
+      short: "You build the actual thing. The agent that runs, the workflow that ships.",
+      detail: "This is an AI developer role. You'll be embedded with clients, working directly on their operations — mapping workflows, building agents, wiring things together until they actually work.\n\nYou don't need a traditional background. We don't care where you went to school or what your LinkedIn looks like. What matters is what you've actually built with AI and how you think through problems.\n\nYou'll be working with LLMs, automations, integrations, and occasionally some pretty gnarly legacy processes. If you like figuring things out from scratch and shipping things that matter — this is it.",
+    },
+  ];
+
   return (
     <>
       <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.55)",zIndex:40,animation:"backdropIn 0.3s ease",cursor:"pointer"}}/>
       <div style={{position:"fixed",top:0,right:0,width:"min(440px,100vw)",height:"100vh",background:"linear-gradient(180deg,#0f0f14 0%,#0a0a0d 100%)",borderLeft:"0.5px solid rgba(255,255,255,0.08)",zIndex:50,display:"flex",flexDirection:"column",animation:"slidePanel 0.38s cubic-bezier(0.32,0.72,0,1)",overflowY:"auto"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"20px 28px 18px",borderBottom:"0.5px solid rgba(255,255,255,0.06)",flexShrink:0}}>
           <div style={{display:"flex",alignItems:"center",gap:8}}>
-            <div style={{width:6,height:6,borderRadius:"50%",background:"#fbbf24"}}/>
-            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#fbbf24",letterSpacing:"0.12em"}}>INVESTORS & PARTNERS</span>
+            <div style={{width:6,height:6,borderRadius:"50%",background:"#7fffd4",animation:"pulse 1.6s infinite"}}/>
+            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7fffd4",letterSpacing:"0.12em"}}>CAREERS</span>
           </div>
           <button onClick={onClose} style={{background:"none",border:"none",color:"#5a5a62",cursor:"pointer",fontSize:18,lineHeight:1,padding:"4px 8px",transition:"color 0.18s"}}
             onMouseEnter={e=>e.currentTarget.style.color="#ece9e4"}
@@ -1065,52 +1086,50 @@ function InvestorPanel({onClose, onContact}) {
         <div style={{padding:"32px 28px 40px",display:"flex",flexDirection:"column",gap:28}}>
           <div>
             <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:22,fontWeight:700,color:"#ece9e4",lineHeight:1.25,letterSpacing:"-0.01em",marginBottom:14}}>
-              We're building this with our hands. And we're looking for the right people to build it with us.
+              We're growing fast. Come build with us.
             </h2>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8}}>
-              We're an early-stage, hands-on team. Every workspace we deliver is intentional. Every client we take on, we commit to fully. That's what makes the results real - and that's what makes them stick.
+              We're a small team doing serious work. Every client we take on, we commit to fully. If you want to be somewhere that actually ships things that change how people work — read on.
             </p>
           </div>
           <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
-          <div>
-            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#fbbf24",letterSpacing:"0.12em",marginBottom:12}}>WHERE WE ARE</div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8}}>
-              We have early customers. We have proof. Nine workspaces delivered, twelve teams that now operate differently than they did before. The demand is real, the product works, and we know exactly what we're doing. Now we need to do more of it.
-            </p>
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
+            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#5a5a62",letterSpacing:"0.12em",marginBottom:4}}>OPEN ROLES</div>
+            {jobs.map((job,i)=>(
+              <div key={job.id}>
+                <button className="dbtn" onClick={()=>setExpanded(expanded===job.id?null:job.id)}
+                  style={{animation:`slideIn 0.4s ${i*0.1}s ease both`}}>
+                  <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:10}}>
+                    <div>
+                      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}>
+                        <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:600,color:"#ece9e4"}}>{job.title}</span>
+                        <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:job.tagColor,background:`${job.tagColor}14`,border:`0.5px solid ${job.tagColor}33`,borderRadius:4,padding:"2px 7px",letterSpacing:"0.06em"}}>{job.tag}</span>
+                      </div>
+                      <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#5a5a62",lineHeight:1.5}}>{job.short}</div>
+                    </div>
+                    <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:13,color:"#3a3a42",flexShrink:0,marginTop:2,display:"inline-block",transition:"transform 0.2s,color 0.18s",transform:expanded===job.id?"rotate(90deg)":"none"}}>›</span>
+                  </div>
+                  {expanded===job.id&&(
+                    <div style={{marginTop:14,paddingTop:14,borderTop:"0.5px solid rgba(255,255,255,0.06)",animation:"fadeUp 0.25s ease"}}>
+                      {job.detail.split("\n\n").map((para,pi)=>(
+                        <p key={pi} style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#8a8a95",lineHeight:1.8,marginBottom:pi<job.detail.split("\n\n").length-1?12:0}}>{para}</p>
+                      ))}
+                    </div>
+                  )}
+                </button>
+              </div>
+            ))}
           </div>
           <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
           <div>
-            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#a78bfa",letterSpacing:"0.12em",marginBottom:12}}>WHAT WE'RE LOOKING FOR</div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8,marginBottom:12}}>
-              We're not looking for passive capital. We're looking for partners who understand what broken internal tooling costs a company - who want to be part of fixing that at scale and helping us reach our best for our customers.
-            </p>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#8a8a95",lineHeight:1.8}}>
-              If you can open doors, share experience, and increase our volume and reach - that's the kind of partnership that makes sense here.
+            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#5a5a62",letterSpacing:"0.12em",marginBottom:10}}>HOW WE HIRE</div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#6b6b72",lineHeight:1.8}}>
+              No degree requirements. No CV logo checks. No age filters. We want to know what you've built, how you think, and what you'd bring here. A portfolio link goes further than a resume every single time.
             </p>
           </div>
-          <div style={{background:"rgba(251,191,36,0.04)",border:"0.5px solid rgba(251,191,36,0.12)",borderRadius:12,padding:"20px 22px"}}>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:16,marginBottom:16}}>
-              {[{n:"9",label:"Workspaces built"},{n:"12",label:"First customers"},{n:"90",label:"Days to delivery"}].map(s=>(
-                <div key={s.label}>
-                  <div style={{fontFamily:"'Syne',sans-serif",fontSize:28,fontWeight:800,color:"#fbbf24",lineHeight:1}}>{s.n}</div>
-                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#5a5a62",marginTop:4}}>{s.label}</div>
-                </div>
-              ))}
-            </div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#6b6b72",lineHeight:1.75}}>
-              Early stage, real traction. We're growing deliberately, choosing quality over speed. The right investment and partnership accelerates that without compromising it.
-            </p>
-          </div>
-          <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
-          <div>
-            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7fffd4",letterSpacing:"0.12em",marginBottom:12}}>THE OPPORTUNITY</div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8}}>
-              Teams everywhere are realizing their tools don't fit. They patch together software never designed for them, losing months to the wrong systems. The market for custom, human-first operational workspaces is wide open and we know how to build them.
-            </p>
-          </div>
-          <button className="pbtn accentbtn" style={{width:"100%",textAlign:"center"}}
+          <button className="pbtn" style={{width:"100%",textAlign:"center"}}
             onClick={()=>{onClose();onContact();}}>
-            Tell us about yourself
+            Contact with us
           </button>
         </div>
       </div>
@@ -1118,14 +1137,13 @@ function InvestorPanel({onClose, onContact}) {
   );
 }
 
-// ─── Investor Modal ───────────────────────────────────────────────────────────
+// ─── Career Modal ────────────────────────────────────────────────────────────
 
-function InvestorModal({onClose}) {
-  const [form, setForm] = useState({name:"",email:"",org:"",role:"",stage:"",bring:"",interest:"",source:""});
+function CareerModal({onClose}) {
+  const [form, setForm] = useState({name:"",email:"",role:"",project:"",portfolio:""});
   const [phase, setPhase] = useState("form");
 
-  // ⚠️ Replace with your deployed Investor Apps Script URL
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwXeKDgyADLBIG5rXoMeX9Y6NshWS4Mcu8v0m805bCnLsTDzAt5p06KA04EY7ys4x43Xw/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz30usqYg5swiEFJYECbC4MWxyGZEV7kP7R-X97Ezhj3DREwT156z0PtwwINc3GmwSxVw/exec";
 
   const upd = e => setForm(f=>({...f,[e.target.name]:e.target.value}));
 
@@ -1133,23 +1151,22 @@ function InvestorModal({onClose}) {
     e.preventDefault();
     setPhase("submitting");
     try {
-      fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({...form,submittedAt:new Date().toISOString()})});
+      fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({...form,type:"career",submittedAt:new Date().toISOString()})});
     } catch(_){}
     setTimeout(()=>setPhase("success"),900);
   };
 
   const lbl = {fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#5a5a62",letterSpacing:"0.1em",marginBottom:6,display:"block"};
-  const ROLES = ["Angel Investor","Venture Capital","Strategic Partner","Corporate Investor","Advisor","Other"];
-  const STAGES = ["Pre-seed","Seed","Series A+","Strategic / No capital"];
+  const ROLES = ["Account Executive","Forward Deployed Engineer"];
 
   return (
     <>
       <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.68)",zIndex:80,animation:"backdropIn 0.3s ease",cursor:"pointer"}}/>
-      <div style={{position:"fixed",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:"min(540px,95vw)",maxHeight:"92vh",background:"linear-gradient(160deg,#111116 0%,#0c0c10 100%)",border:"0.5px solid rgba(251,191,36,0.14)",borderRadius:16,zIndex:90,display:"flex",flexDirection:"column",animation:"modalIn 0.38s cubic-bezier(0.34,1.56,0.64,1) both",boxShadow:"0 60px 120px rgba(0,0,0,0.85)",overflowY:"auto"}}>
+      <div style={{position:"fixed",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:"min(540px,95vw)",maxHeight:"92vh",background:"linear-gradient(160deg,#111116 0%,#0c0c10 100%)",border:"0.5px solid rgba(127,255,212,0.14)",borderRadius:16,zIndex:90,display:"flex",flexDirection:"column",animation:"modalIn 0.38s cubic-bezier(0.34,1.56,0.64,1) both",boxShadow:"0 60px 120px rgba(0,0,0,0.85)",overflowY:"auto"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"20px 28px 18px",borderBottom:"0.5px solid rgba(255,255,255,0.06)",flexShrink:0,position:"sticky",top:0,background:"linear-gradient(160deg,#111116 0%,#0c0c10 100%)",zIndex:1}}>
           <div style={{display:"flex",alignItems:"center",gap:8}}>
-            <div style={{width:6,height:6,borderRadius:"50%",background:"#fbbf24"}}/>
-            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#fbbf24",letterSpacing:"0.12em"}}>INVESTOR & PARTNER ENQUIRY</span>
+            <div style={{width:6,height:6,borderRadius:"50%",background:"#7fffd4",animation:"pulse 1.6s infinite"}}/>
+            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7fffd4",letterSpacing:"0.12em"}}>APPLY</span>
           </div>
           <button onClick={onClose} style={{background:"none",border:"none",color:"#5a5a62",cursor:"pointer",fontSize:18,padding:"4px 8px",transition:"color 0.18s",lineHeight:1}}
             onMouseEnter={e=>e.currentTarget.style.color="#ece9e4"}
@@ -1158,83 +1175,62 @@ function InvestorModal({onClose}) {
 
         {phase==="success" ? (
           <div style={{padding:"56px 28px",textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",gap:22,animation:"fadeUp 0.4s ease"}}>
-            <div style={{width:58,height:58,borderRadius:"50%",background:"rgba(251,191,36,0.08)",border:"0.5px solid rgba(251,191,36,0.3)",display:"flex",alignItems:"center",justifyContent:"center"}}>
-              <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:22,color:"#fbbf24"}}>✓</span>
+            <div style={{width:58,height:58,borderRadius:"50%",background:"rgba(127,255,212,0.08)",border:"0.5px solid rgba(127,255,212,0.3)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+              <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:22,color:"#7fffd4"}}>✓</span>
             </div>
             <div>
-              <h3 style={{fontFamily:"'Syne',sans-serif",fontSize:20,fontWeight:700,color:"#ece9e4",marginBottom:10,letterSpacing:"-0.01em"}}>We've got your details.</h3>
+              <h3 style={{fontFamily:"'Syne',sans-serif",fontSize:20,fontWeight:700,color:"#ece9e4",marginBottom:10,letterSpacing:"-0.01em"}}>Got it. We'll take a look.</h3>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#6b6b72",lineHeight:1.85,maxWidth:320,margin:"0 auto"}}>
-                We'll review what you shared and be in touch within <span style={{color:"#fbbf24"}}>3 business days</span>. Looking forward to the conversation.
+                We'll review what you shared and get back to you within <span style={{color:"#7fffd4"}}>a few days</span>. No automated responses — just real people.
               </p>
             </div>
-            <button className="pbtn accentbtn" onClick={onClose} style={{marginTop:4}}>Close</button>
+            <button className="pbtn" onClick={onClose} style={{marginTop:4}}>Close</button>
           </div>
         ) : (
           <form onSubmit={submit} style={{padding:"24px 28px 32px",display:"flex",flexDirection:"column",gap:16}}>
-            <div style={{background:"rgba(251,191,36,0.04)",border:"0.5px solid rgba(251,191,36,0.14)",borderRadius:10,padding:"14px 16px"}}>
+            <div style={{background:"rgba(127,255,212,0.04)",border:"0.5px solid rgba(127,255,212,0.12)",borderRadius:10,padding:"14px 16px"}}>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#6b6b72",lineHeight:1.8,margin:0}}>
-                We're growing a hands-on team and looking for investors and partners who want to increase our volume and help us reach our best for our customers. Tell us a bit about yourself.
-                <span style={{display:"block",fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#fbbf24",marginTop:8,letterSpacing:"0.09em"}}>↳ WE RESPOND WITHIN 3 BUSINESS DAYS</span>
+                We don't care about your university degree, the logos on your CV, or your age. Just tell us what you've built with AI.
+                <span style={{display:"block",fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#7fffd4",marginTop:8,letterSpacing:"0.09em"}}>↳ A PORTFOLIO LINK IS WORTH MORE THAN A CV HERE</span>
               </p>
             </div>
 
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
               <div>
-                <label style={lbl}>FULL NAME *</label>
+                <label style={lbl}>YOUR NAME *</label>
                 <input required name="name" value={form.name} onChange={upd} placeholder="Jane Smith" className="cinput"/>
               </div>
               <div>
                 <label style={lbl}>EMAIL *</label>
-                <input required type="email" name="email" value={form.email} onChange={upd} placeholder="jane@fund.com" className="cinput"/>
-              </div>
-            </div>
-
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-              <div>
-                <label style={lbl}>ORGANIZATION / FUND *</label>
-                <input required name="org" value={form.org} onChange={upd} placeholder="Fund name, company..." className="cinput"/>
-              </div>
-              <div>
-                <label style={lbl}>YOUR ROLE *</label>
-                <select required name="role" value={form.role} onChange={upd} className="cinput" style={{cursor:"pointer"}}>
-                  <option value="">Select...</option>
-                  {ROLES.map(r=><option key={r} value={r}>{r}</option>)}
-                </select>
+                <input required type="email" name="email" value={form.email} onChange={upd} placeholder="jane@example.com" className="cinput"/>
               </div>
             </div>
 
             <div>
-              <label style={lbl}>INVESTMENT STAGE FOCUS *</label>
-              <select required name="stage" value={form.stage} onChange={upd} className="cinput" style={{cursor:"pointer"}}>
-                <option value="">Select...</option>
-                {STAGES.map(s=><option key={s} value={s}>{s}</option>)}
+              <label style={lbl}>ROLE YOU'RE INTERESTED IN *</label>
+              <select required name="role" value={form.role} onChange={upd} className="cinput" style={{cursor:"pointer"}}>
+                <option value="">Select a role...</option>
+                {ROLES.map(r=><option key={r} value={r}>{r}</option>)}
               </select>
             </div>
 
             <div>
-              <label style={lbl}>WHAT YOU BRING BEYOND CAPITAL <span style={{color:"#3a3a42"}}>(optional)</span></label>
-              <textarea name="bring" value={form.bring} onChange={upd}
-                placeholder="e.g. network in B2B SaaS, experience scaling ops teams, portfolio synergies..."
-                className="cinput" style={{minHeight:78,lineHeight:1.65}}/>
+              <label style={lbl}>TELL US ABOUT A RECENT PROJECT WHERE YOU SOLVED A PROBLEM WITH AI *</label>
+              <textarea required name="project" value={form.project} onChange={upd}
+                placeholder="What was the problem, what did you build, what happened? No need to dress it up — just tell us what you actually did."
+                className="cinput" style={{minHeight:110,lineHeight:1.65}}/>
             </div>
 
             <div>
-              <label style={lbl}>WHY DOES THE NEW ERA OF WORK INTEREST YOU? *</label>
-              <textarea required name="interest" value={form.interest} onChange={upd}
-                placeholder="e.g. I've seen firsthand how broken internal tooling kills productivity. This is the right approach at the right time..."
-                className="cinput" style={{minHeight:78,lineHeight:1.65}}/>
+              <label style={lbl}>PORTFOLIO / GITHUB / ANYTHING YOU'VE BUILT <span style={{color:"#3a3a42"}}>(appreciated)</span></label>
+              <input name="portfolio" value={form.portfolio} onChange={upd} placeholder="github.com/you, your site, a Notion doc..." className="cinput"/>
             </div>
 
-            <div>
-              <label style={lbl}>HOW DID YOU FIND US? <span style={{color:"#3a3a42"}}>(optional)</span></label>
-              <input name="source" value={form.source} onChange={upd} placeholder="LinkedIn, referral, event..." className="cinput"/>
-            </div>
-
-            <button type="submit" className="pbtn accentbtn" disabled={phase==="submitting"}
+            <button type="submit" className="pbtn" disabled={phase==="submitting"}
               style={{width:"100%",textAlign:"center",marginTop:4}}>
-              {phase==="submitting" ? "Sending..." : "Submit enquiry"}
+              {phase==="submitting" ? "Sending..." : "Send it"}
             </button>
-            <p style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#2a2a3a",textAlign:"center",letterSpacing:"0.06em"}}>All information is kept strictly confidential.</p>
+            <p style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#2a2a3a",textAlign:"center",letterSpacing:"0.06em"}}>We read everything ourselves.</p>
           </form>
         )}
       </div>
@@ -1690,7 +1686,7 @@ export default function App() {
             {step>0&&<button className="rbtn" onClick={reset}>↩ restart</button>}
             <button className="abtn" onClick={()=>setAboutOpen(true)}>About us</button>
             <button className="abtn" onClick={()=>setCasesOpen(true)}>Case studies</button>
-            <button className="abtn" onClick={()=>setInvestorOpen(true)}>Become a partner</button>
+            <button className="abtn" onClick={()=>setInvestorOpen(true)}>We're Hiring</button>
             {/* ── "Get in Touch" opens the contact modal ── */}
             <button className="hcta" onClick={openContact}>Get in Touch</button>
           </div>
@@ -1808,8 +1804,8 @@ export default function App() {
             selectedTools={selectedTools}
           />
         )}
-        {investorOpen && <InvestorPanel onClose={()=>setInvestorOpen(false)} onContact={()=>setInvestorForm(true)}/>}
-        {investorForm && <InvestorModal onClose={()=>setInvestorForm(false)}/>}
+        {investorOpen && <CareersPanel onClose={()=>setInvestorOpen(false)} onContact={()=>setInvestorForm(true)}/>}
+        {investorForm && <CareerModal onClose={()=>setInvestorForm(false)}/>}
       </div>
     </>
   );
