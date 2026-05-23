@@ -1658,8 +1658,11 @@ export default function App() {
 
   const liveCount = usePresence();
 
-  const openContact = () => setContact(true);
+  const openContact = () => { setContact(true); setMenuOpen(false); };
   const closeContact = () => setContact(false);
+
+  // Close mobile menu when user navigates away from step 0
+  useEffect(()=>{ setMenuOpen(false); },[step]);
 
   const handleToolDone = (sel) => { setST(sel); setStep(3); };
 
@@ -1690,6 +1693,7 @@ export default function App() {
   const reset=()=>{ setStep(0); setDept(null); setST([]); setIsoPhase(0); setRP(0); };
 
   const isMobile = useIsMobile();
+  const [menuOpen, setMenuOpen] = useState(false);
   const cardMaxW = step===4?"860px":step===3?"660px":"560px";
   const stepLabels = ["Select","Configure","Journey","Live"];
 
@@ -1707,7 +1711,7 @@ export default function App() {
         <div style={{position:"absolute",top:"8%",left:"50%",transform:"translateX(-50%)",width:700,height:500,background:"radial-gradient(ellipse,rgba(127,255,212,0.032) 0%,transparent 70%)",pointerEvents:"none"}}/>
 
         {/* HEADER */}
-        <header style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:isMobile?"0 16px":"0 32px",height:isMobile?46:54,flexShrink:0,borderBottom:"0.5px solid rgba(255,255,255,0.05)",position:"relative",zIndex:10}}>
+        <header style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:isMobile?"0 16px":"0 32px",height:isMobile?46:54,flexShrink:0,borderBottom:"0.5px solid rgba(255,255,255,0.05)",position:"relative",zIndex:20}}>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
             <img
               src="/favicon.svg"
@@ -1721,10 +1725,43 @@ export default function App() {
             <button className="abtn" onClick={()=>setAboutOpen(true)}>About us</button>
             <button className="abtn" onClick={()=>setCasesOpen(true)}>Case studies</button>
             <button className="abtn" onClick={()=>setInvestorOpen(true)}>We're Hiring</button>
+            {/* ── Hamburger — mobile only ── */}
+            {isMobile&&(
+              <button
+                onClick={()=>setMenuOpen(o=>!o)}
+                style={{background:"none",border:"none",cursor:"pointer",padding:"6px 4px",display:"flex",flexDirection:"column",gap:4,alignItems:"center",justifyContent:"center"}}
+                aria-label="Menu"
+              >
+                <span style={{display:"block",width:18,height:1.5,background:menuOpen?"#7fffd4":"#ece9e4",borderRadius:2,transition:"all 0.22s",transform:menuOpen?"rotate(45deg) translate(4px,4px)":"none"}}/>
+                <span style={{display:"block",width:18,height:1.5,background:menuOpen?"#7fffd4":"#ece9e4",borderRadius:2,transition:"all 0.22s",opacity:menuOpen?0:1}}/>
+                <span style={{display:"block",width:18,height:1.5,background:menuOpen?"#7fffd4":"#ece9e4",borderRadius:2,transition:"all 0.22s",transform:menuOpen?"rotate(-45deg) translate(4px,-4px)":"none"}}/>
+              </button>
+            )}
             {/* ── "Get in Touch" opens the contact modal ── */}
             <button className="hcta" onClick={openContact}>Get in Touch</button>
           </div>
         </header>
+
+        {/* MOBILE MENU DROPDOWN */}
+        {isMobile&&menuOpen&&(
+          <div style={{position:"absolute",top:isMobile?46:54,left:0,right:0,zIndex:19,background:"linear-gradient(180deg,#0f0f14 0%,#0a0a0d 100%)",borderBottom:"0.5px solid rgba(255,255,255,0.08)",animation:"fadeUp 0.18s ease",display:"flex",flexDirection:"column"}}>
+            {[
+              {label:"About us",      action:()=>{setAboutOpen(true);setMenuOpen(false);}},
+              {label:"Case studies",  action:()=>{setCasesOpen(true);setMenuOpen(false);}},
+              {label:"We're Hiring",  action:()=>{setInvestorOpen(true);setMenuOpen(false);}},
+            ].map((item,i)=>(
+              <button
+                key={item.label}
+                onClick={item.action}
+                style={{background:"none",border:"none",borderBottom:i<2?"0.5px solid rgba(255,255,255,0.05)":"none",color:"#ece9e4",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontSize:14,fontWeight:400,padding:"16px 20px",textAlign:"left",transition:"background 0.15s",letterSpacing:"0.01em"}}
+                onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,0.04)"}
+                onMouseLeave={e=>e.currentTarget.style.background="none"}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* MAIN */}
         <main style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:isMobile?"6px 14px":"10px 24px",position:"relative",zIndex:5,overflow:"hidden"}}>
