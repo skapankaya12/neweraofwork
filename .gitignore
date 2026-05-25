@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Internal / sensitive files — never push these
+*.xlsx
+*.docx
+cold-email-system/
+On-Forward-AE-Sales-Playbook.md
+Prospects_*.xlsx
+on-forward-email-sequences.docx
