@@ -1550,6 +1550,15 @@ function AboutPanel({onClose, onContact}) {
           <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
 
           <div>
+            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#82261E",letterSpacing:"0.12em",marginBottom:12}}>WHO THIS IS FOR</div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8}}>
+              Ops leads, finance directors, and firm managers who know exactly which process is eating their team's week — and haven't found a way to fix it yet. Professional services firms, consulting and advisory practices, any organization where knowledge-heavy, repetitive work is still being done by hand.
+            </p>
+          </div>
+
+          <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
+
+          <div>
             <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#a78bfa",letterSpacing:"0.12em",marginBottom:12}}>THE REAL PROBLEM</div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8,marginBottom:12}}>
               According to Deloitte's State of AI in the Enterprise report, the AI skills gap is the single biggest barrier to AI integration, and yet most companies are responding with education, not workflow redesign.
@@ -1827,13 +1836,13 @@ export default function App() {
 
             {step===0&&(
               <div style={{padding:isMobile?"24px 20px":"44px 40px",textAlign:"center",animation:"fadeIn 0.4s ease"}}>
-                <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:12,color:"#F0F5F3",marginBottom:24}}>Your workspace begins with a conversation.</div>
+                <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:12,color:"#F0F5F3",marginBottom:24}}>Every engagement starts with a conversation about how your business actually runs.</div>
                 <button
                   className="pbtn"
                   onClick={()=>setStep(1)}
                   style={{background:"linear-gradient(25deg,rgb(0, 0, 0) 0%, #82261E 70%)",border:"0.5px solid rgba(130,38,30,0.45)",color:"#F0F5F3"}}
                 >
-                  Begin setup
+                  Start a conversation
                 </button>
               </div>
             )}
@@ -1869,6 +1878,17 @@ export default function App() {
           >
             Start the Conversation
           </button>
+          <span style={{color:"#3a3a42",fontSize:isMobile?10:11}}>·</span>
+          <a
+            href="/privacy-policy.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{fontFamily:"'DM Sans',sans-serif",fontSize:isMobile?10:11,color:"#4a4a52",textDecoration:"none",transition:"color 0.18s"}}
+            onMouseEnter={e=>e.target.style.color="#8a8a95"}
+            onMouseLeave={e=>e.target.style.color="#4a4a52"}
+          >
+            Privacy Policy
+          </a>
         </footer>
 
         {/* ABOUT PANEL — passes onContact so its CTA opens the modal */}
