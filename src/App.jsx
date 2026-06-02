@@ -1555,7 +1555,7 @@ function AboutPanel({onClose, onContact}) {
         </div>
 
         {/* Diagram image — full width at top */}
-        <div style={{width:"100%",background:"#f9fafb",borderBottom:"1px solid #f0f0f0",flexShrink:0}}>
+        <div style={{width:"100%",borderBottom:"1px solid #e5e7eb",flexShrink:0}}>
           <img
             src={aboutDiagram}
             alt="On Forward: We bridge business goals and technical solutions"
@@ -1563,9 +1563,6 @@ function AboutPanel({onClose, onContact}) {
               width:"100%",
               height:"auto",
               display:"block",
-              maxHeight: isMobile ? 260 : 340,
-              objectFit:"contain",
-              padding: isMobile ? "16px 12px" : "24px 28px",
             }}
           />
         </div>
