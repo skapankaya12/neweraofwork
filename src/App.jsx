@@ -1516,119 +1516,153 @@ function CaseStudiesPanel({onClose, onContact}) {
 // ─── About Panel ──────────────────────────────────────────────────────────────
 
 function AboutPanel({onClose, onContact}) {
+  const isMobile = useIsMobile();
   return (
     <>
       {/* Backdrop */}
       <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.55)",zIndex:40,animation:"backdropIn 0.3s ease",cursor:"pointer"}}/>
 
       {/* Panel */}
-      <div style={{position:"fixed",top:0,right:0,width:"min(440px,100vw)",height:"100vh",background:"linear-gradient(180deg,#0f0f14 0%,#0a0a0d 100%)",borderLeft:"0.5px solid rgba(255,255,255,0.08)",zIndex:50,display:"flex",flexDirection:"column",animation:"slidePanel 0.38s cubic-bezier(0.32,0.72,0,1)",overflowY:"auto"}}>
+      <div style={{
+        position:"fixed",top:0,right:0,
+        width: isMobile ? "100vw" : "min(520px,100vw)",
+        height:"100vh",
+        background:"#ffffff",
+        borderLeft: isMobile ? "none" : "1px solid #e5e7eb",
+        zIndex:50,
+        display:"flex",flexDirection:"column",
+        animation:"slidePanel 0.38s cubic-bezier(0.32,0.72,0,1)",
+        overflowY:"auto"
+      }}>
 
         {/* Panel header */}
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"20px 28px 18px",borderBottom:"0.5px solid rgba(255,255,255,0.06)",flexShrink:0}}>
+        <div style={{
+          display:"flex",alignItems:"center",justifyContent:"space-between",
+          padding: isMobile ? "16px 20px 14px" : "20px 28px 18px",
+          borderBottom:"1px solid #f0f0f0",
+          flexShrink:0,
+          background:"#ffffff",
+          position:"sticky",top:0,zIndex:1,
+        }}>
           <div style={{display:"flex",alignItems:"center",gap:8}}>
-            <div style={{width:6,height:6,borderRadius:"50%",background:"#7fffd4"}}/>
-            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7fffd4",letterSpacing:"0.12em"}}>ABOUT US</span>
+            <div style={{width:6,height:6,borderRadius:"50%",background:"#82261E"}}/>
+            <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#82261E",letterSpacing:"0.12em"}}>ABOUT US</span>
           </div>
-          <button onClick={onClose} style={{background:"none",border:"none",color:"#5a5a62",cursor:"pointer",fontSize:18,lineHeight:1,padding:"4px 8px",transition:"color 0.18s"}}
-            onMouseEnter={e=>e.currentTarget.style.color="#ece9e4"}
-            onMouseLeave={e=>e.currentTarget.style.color="#5a5a62"}>✕</button>
+          <button onClick={onClose} style={{background:"none",border:"none",color:"#9ca3af",cursor:"pointer",fontSize:18,lineHeight:1,padding:"4px 8px",transition:"color 0.18s"}}
+            onMouseEnter={e=>e.currentTarget.style.color="#111827"}
+            onMouseLeave={e=>e.currentTarget.style.color="#9ca3af"}>✕</button>
+        </div>
+
+        {/* Diagram image — full width at top */}
+        <div style={{width:"100%",background:"#f9fafb",borderBottom:"1px solid #f0f0f0",flexShrink:0}}>
+          <img
+            src="/about-diagram.png"
+            alt="On Forward — We bridge business goals and technical solutions"
+            style={{
+              width:"100%",
+              height:"auto",
+              display:"block",
+              maxHeight: isMobile ? 260 : 340,
+              objectFit:"contain",
+              padding: isMobile ? "16px 12px" : "24px 28px",
+            }}
+          />
         </div>
 
         {/* Panel body */}
-        <div style={{padding:"32px 28px 40px",display:"flex",flexDirection:"column",gap:28}}>
+        <div style={{padding: isMobile ? "24px 20px 40px" : "32px 28px 48px", display:"flex",flexDirection:"column",gap: isMobile ? 22 : 28}}>
 
           <div>
-            <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:22,fontWeight:700,color:"#ece9e4",lineHeight:1.25,letterSpacing:"-0.01em",marginBottom:14}}>
+            <h2 style={{fontFamily:"'Syne',sans-serif",fontSize: isMobile ? 19 : 22,fontWeight:700,color:"#111827",lineHeight:1.25,letterSpacing:"-0.01em",marginBottom:12}}>
               We go inside companies, learn how they actually work, and build custom AI around it.
             </h2>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize: isMobile ? 13 : 14,color:"#6b7280",lineHeight:1.8}}>
               Every company has its own rhythm, its own bottlenecks, its own processes running on spreadsheets and institutional memory. We map the real thing, not the org-chart version, and build AI around it.
             </p>
           </div>
 
-          <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
+          <div style={{height:"1px",background:"#f3f4f6"}}/>
 
           <div>
             <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#82261E",letterSpacing:"0.12em",marginBottom:12}}>WHO THIS IS FOR</div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize: isMobile ? 13 : 14,color:"#6b7280",lineHeight:1.8}}>
               Ops leads, finance directors, and firm managers who know exactly which process is eating their team's week — and haven't found a way to fix it yet. Professional services firms, consulting and advisory practices, any organization where knowledge-heavy, repetitive work is still being done by hand.
             </p>
           </div>
 
-          <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
+          <div style={{height:"1px",background:"#f3f4f6"}}/>
 
           <div>
-            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#a78bfa",letterSpacing:"0.12em",marginBottom:12}}>THE REAL PROBLEM</div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8,marginBottom:12}}>
+            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7c3aed",letterSpacing:"0.12em",marginBottom:12}}>THE REAL PROBLEM</div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize: isMobile ? 13 : 14,color:"#6b7280",lineHeight:1.8,marginBottom:12}}>
               According to Deloitte's State of AI in the Enterprise report, the AI skills gap is the single biggest barrier to AI integration, and yet most companies are responding with education, not workflow redesign.
             </p>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#8a8a95",lineHeight:1.8,marginBottom:12}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize: isMobile ? 13 : 14,color:"#9ca3af",lineHeight:1.8,marginBottom:12}}>
               Sending your team to AI courses doesn't get workflows built. It doesn't identify what's broken. It doesn't produce agents that actually run your operations better.
             </p>
             <a
               href="https://www.deloitte.com/us/en/what-we-do/capabilities/applied-artificial-intelligence/content/state-of-ai-in-the-enterprise.html"
               target="_blank"
               rel="noopener noreferrer"
-              style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#a78bfa",letterSpacing:"0.08em",textDecoration:"none",borderBottom:"0.5px solid rgba(167,139,250,0.35)",paddingBottom:1,transition:"color 0.18s"}}
+              style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7c3aed",letterSpacing:"0.08em",textDecoration:"none",borderBottom:"1px solid rgba(124,58,237,0.3)",paddingBottom:1,transition:"color 0.18s"}}
             >↗ Deloitte · State of AI in the Enterprise 2026</a>
           </div>
 
-          <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
+          <div style={{height:"1px",background:"#f3f4f6"}}/>
 
           <div>
-            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7fffd4",letterSpacing:"0.12em",marginBottom:12}}>WHAT IS FORWARD DEPLOYED ENGINEERING</div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8,marginBottom:12}}>
+            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#059669",letterSpacing:"0.12em",marginBottom:12}}>WHAT IS FORWARD DEPLOYED ENGINEERING</div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize: isMobile ? 13 : 14,color:"#6b7280",lineHeight:1.8,marginBottom:12}}>
               Forward Deployed Engineering is one of the fastest-growing roles in tech. A Forward Deployed Engineer (FDE) embeds directly inside a customer's business, learns how it actually operates, and builds solutions around the real problems, not the ones assumed from the outside.
             </p>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#8a8a95",lineHeight:1.8,marginBottom:12}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize: isMobile ? 13 : 14,color:"#9ca3af",lineHeight:1.8,marginBottom:12}}>
               Salesforce called it "today's hottest role." Job postings for FDEs grew over 800% in 2025 alone. It's the model that works when complexity is high and off-the-shelf doesn't cut it. That's exactly how On Forward operates.
             </p>
             <a
               href="https://www.salesforce.com/blog/forward-deployed-engineer/"
               target="_blank"
               rel="noopener noreferrer"
-              style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7fffd4",letterSpacing:"0.08em",textDecoration:"none",borderBottom:"0.5px solid rgba(127,255,212,0.35)",paddingBottom:1,transition:"color 0.18s"}}
+              style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#059669",letterSpacing:"0.08em",textDecoration:"none",borderBottom:"1px solid rgba(5,150,105,0.3)",paddingBottom:1,transition:"color 0.18s"}}
             >↗ Salesforce · Forward Deployed Engineer: 5 Skills for This New Role</a>
           </div>
 
-          <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
+          <div style={{height:"1px",background:"#f3f4f6"}}/>
 
           <div>
-            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#7fffd4",letterSpacing:"0.12em",marginBottom:12}}>WE TRANSLATE</div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8}}>
+            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#059669",letterSpacing:"0.12em",marginBottom:12}}>WE TRANSLATE</div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize: isMobile ? 13 : 14,color:"#6b7280",lineHeight:1.8}}>
               We are the people who can sit between AI capability and real business problems and make them speak the same language. We understand both sides, and we build the bridge.
             </p>
           </div>
 
-          <div style={{height:"0.5px",background:"rgba(255,255,255,0.06)"}}/>
+          <div style={{height:"1px",background:"#f3f4f6"}}/>
 
           <div>
-            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#fbbf24",letterSpacing:"0.12em",marginBottom:12}}>HOW WE WORK</div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b6b72",lineHeight:1.8,marginBottom:12}}>
+            <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#d97706",letterSpacing:"0.12em",marginBottom:12}}>HOW WE WORK</div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize: isMobile ? 13 : 14,color:"#6b7280",lineHeight:1.8,marginBottom:12}}>
               We embed with your team. We ask the right questions and map how your operations actually run, not the org-chart version, the real version. Then we find what's underautomated, what's broken, what's eating hours that don't need to be eaten.
             </p>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#8a8a95",lineHeight:1.8}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize: isMobile ? 13 : 14,color:"#9ca3af",lineHeight:1.8}}>
               Then we build. Custom AI workflows and agents designed specifically around those gaps. Not generic. Not off-the-shelf. Yours, and it stays yours after we're done.
             </p>
           </div>
 
-          <div style={{background:"rgba(127,255,212,0.04)",border:"0.5px solid rgba(127,255,212,0.12)",borderRadius:12,padding:"20px 22px"}}>
+          <div style={{background:"#f0fdf4",border:"1px solid #bbf7d0",borderRadius:12,padding:"20px 22px"}}>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:16}}>
               {[{n:"9",label:"Engagements completed"},{n:"12",label:"Early clients"}].map(s=>(
                 <div key={s.label}>
-                  <div style={{fontFamily:"'Syne',sans-serif",fontSize:28,fontWeight:800,color:"#7fffd4",lineHeight:1}}>{s.n}</div>
-                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#5a5a62",marginTop:4}}>{s.label}</div>
+                  <div style={{fontFamily:"'Syne',sans-serif",fontSize:28,fontWeight:800,color:"#059669",lineHeight:1}}>{s.n}</div>
+                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"#6b7280",marginTop:4}}>{s.label}</div>
                 </div>
               ))}
             </div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#6b6b72",lineHeight:1.75}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#6b7280",lineHeight:1.75}}>
               Our first clients were early movers. They let us inside before it was obvious. Every engagement produced something custom, AI that runs in their business today, built around how they actually operate.
             </p>
           </div>
 
-          <div style={{background:"rgba(255,255,255,0.025)",border:"0.5px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"18px 20px"}}>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#8a8a95",lineHeight:1.8,fontStyle:"italic"}}>
+          <div style={{background:"#f9fafb",border:"1px solid #e5e7eb",borderRadius:10,padding:"18px 20px"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"#6b7280",lineHeight:1.8,fontStyle:"italic"}}>
               "We go in. We learn how your business really works. We find what AI can fix. We build it. That's the whole model."
             </p>
           </div>
