@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { usePresence } from "./firebase";
+import aboutDiagram from "./assets/about-diagram.png";
 
 try {
   const l = document.createElement("link");
@@ -1556,8 +1557,8 @@ function AboutPanel({onClose, onContact}) {
         {/* Diagram image — full width at top */}
         <div style={{width:"100%",background:"#f9fafb",borderBottom:"1px solid #f0f0f0",flexShrink:0}}>
           <img
-            src="/about-diagram.png"
-            alt="On Forward — We bridge business goals and technical solutions"
+            src={aboutDiagram}
+            alt="On Forward: We bridge business goals and technical solutions"
             style={{
               width:"100%",
               height:"auto",
@@ -1577,7 +1578,7 @@ function AboutPanel({onClose, onContact}) {
               We go inside companies, learn how they actually work, and build custom AI around it.
             </h2>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize: isMobile ? 13 : 14,color:"#6b7280",lineHeight:1.8}}>
-              Every company has its own rhythm, its own bottlenecks, its own processes running on spreadsheets and institutional memory. We map the real thing, not the org-chart version, and build AI around it.
+              Every company has its own rhythm, its own bottlenecks, its own processes running on spreadsheets and institutional memory. We map the real thing, not the org chart version, and build AI around it.
             </p>
           </div>
 
@@ -1586,7 +1587,7 @@ function AboutPanel({onClose, onContact}) {
           <div>
             <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#82261E",letterSpacing:"0.12em",marginBottom:12}}>WHO THIS IS FOR</div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize: isMobile ? 13 : 14,color:"#6b7280",lineHeight:1.8}}>
-              Ops leads, finance directors, and firm managers who know exactly which process is eating their team's week — and haven't found a way to fix it yet. Professional services firms, consulting and advisory practices, any organization where knowledge-heavy, repetitive work is still being done by hand.
+              Ops leads, finance directors, and firm managers who know exactly which process is eating their team's week and haven't found a way to fix it yet. Professional services firms, consulting and advisory practices, any organization where knowledge heavy, repetitive work is still being done by hand.
             </p>
           </div>
 
@@ -1613,10 +1614,10 @@ function AboutPanel({onClose, onContact}) {
           <div>
             <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#059669",letterSpacing:"0.12em",marginBottom:12}}>WHAT IS FORWARD DEPLOYED ENGINEERING</div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize: isMobile ? 13 : 14,color:"#6b7280",lineHeight:1.8,marginBottom:12}}>
-              Forward Deployed Engineering is one of the fastest-growing roles in tech. A Forward Deployed Engineer (FDE) embeds directly inside a customer's business, learns how it actually operates, and builds solutions around the real problems, not the ones assumed from the outside.
+              Forward Deployed Engineering is one of the fastest growing roles in tech. A Forward Deployed Engineer (FDE) embeds directly inside a customer's business, learns how it actually operates, and builds solutions around the real problems, not the ones assumed from the outside.
             </p>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize: isMobile ? 13 : 14,color:"#9ca3af",lineHeight:1.8,marginBottom:12}}>
-              Salesforce called it "today's hottest role." Job postings for FDEs grew over 800% in 2025 alone. It's the model that works when complexity is high and off-the-shelf doesn't cut it. That's exactly how On Forward operates.
+              Salesforce called it "today's hottest role." Job postings for FDEs grew over 800% in 2025 alone. It's the model that works when complexity is high and off the shelf doesn't cut it. That's exactly how On Forward operates.
             </p>
             <a
               href="https://www.salesforce.com/blog/forward-deployed-engineer/"
@@ -1640,10 +1641,10 @@ function AboutPanel({onClose, onContact}) {
           <div>
             <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#d97706",letterSpacing:"0.12em",marginBottom:12}}>HOW WE WORK</div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize: isMobile ? 13 : 14,color:"#6b7280",lineHeight:1.8,marginBottom:12}}>
-              We embed with your team. We ask the right questions and map how your operations actually run, not the org-chart version, the real version. Then we find what's underautomated, what's broken, what's eating hours that don't need to be eaten.
+              We embed with your team. We ask the right questions and map how your operations actually run, not the org chart version, the real version. Then we find what's underautomated, what's broken, what's eating hours that don't need to be eaten.
             </p>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize: isMobile ? 13 : 14,color:"#9ca3af",lineHeight:1.8}}>
-              Then we build. Custom AI workflows and agents designed specifically around those gaps. Not generic. Not off-the-shelf. Yours, and it stays yours after we're done.
+              Then we build. Custom AI workflows and agents designed specifically around those gaps. Not generic. Not off the shelf. Yours, and it stays yours after we're done.
             </p>
           </div>
 
