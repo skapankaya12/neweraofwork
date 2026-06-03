@@ -1874,7 +1874,7 @@ export default function App() {
                   onClick={()=>setStep(1)}
                   style={{background:"linear-gradient(25deg,rgb(0, 0, 0) 0%, #82261E 70%)",border:"0.5px solid rgba(130,38,30,0.45)",color:"#F0F5F3"}}
                 >
-                  Start a conversation
+                  Map your workflow
                 </button>
               </div>
             )}
