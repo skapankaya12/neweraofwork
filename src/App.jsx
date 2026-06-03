@@ -1680,6 +1680,135 @@ function AboutPanel({onClose, onContact}) {
   );
 }
 
+// ─── Insights / AI Workflows Hub — FULL SCREEN ────────────────────────────────
+
+const INSIGHTS_ARTICLES = [
+  {
+    tag: "Decision",
+    accent: "#82261E",
+    title: "Build vs buy AI: the question that is actually wrong",
+    blurb: "Everyone is asking whether to build or buy. The honest answer is that neither matters if your team never adopts it. Here is the question we ask instead.",
+    href: "/aiworkflowshub/build-vs-buy-ai.html",
+    img: "/aiworkflowshub/build-vs-buy.png",
+  },
+  {
+    tag: "Adoption",
+    accent: "#7c3aed",
+    title: "We bought the AI tools. Nobody uses them. Here is why.",
+    blurb: "Most companies can use AI but only a fraction do. The gap is not training. It is that the tool was never built around how the work actually happens.",
+    href: "/aiworkflowshub/why-teams-dont-adopt-ai.html",
+    img: "/aiworkflowshub/adoption-gap.png",
+  },
+  {
+    tag: "Build walkthrough",
+    accent: "#059669",
+    title: "How we automated invoice-to-PO matching in six weeks",
+    blurb: "A first-hand account of one real build: what we mapped, what we built, and exactly where we kept a human in the loop.",
+    href: "/aiworkflowshub/automate-invoice-matching.html",
+    img: "/aiworkflowshub/invoice-matching.png",
+  },
+  {
+    tag: "Category",
+    accent: "#d97706",
+    title: "What a Forward Deployed Engineering firm actually does",
+    blurb: "It is the role every AI lab is now hiring for. In plain English, here is what it means when a firm embeds, maps, builds, and supports.",
+    href: "/aiworkflowshub/what-is-forward-deployed-engineering.html",
+    img: "/aiworkflowshub/forward-deployed.png",
+  },
+];
+
+function InsightsScreen({onClose, onContact}) {
+  const isMobile = useIsMobile();
+  return (
+    <div style={{
+      position:"fixed",inset:0,zIndex:60,
+      background:"#ffffff",
+      overflowY:"auto",
+      animation:"fadeUp 0.28s ease",
+    }}>
+      {/* Sticky header */}
+      <div style={{
+        display:"flex",alignItems:"center",justifyContent:"space-between",
+        padding: isMobile ? "16px 20px 14px" : "20px 40px 18px",
+        borderBottom:"1px solid #f0f0f0",
+        background:"#ffffff",position:"sticky",top:0,zIndex:2,
+      }}>
+        <div style={{display:"flex",alignItems:"center",gap:8}}>
+          <div style={{width:6,height:6,borderRadius:"50%",background:"#82261E"}}/>
+          <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#82261E",letterSpacing:"0.12em"}}>AI WORKFLOWS HUB</span>
+        </div>
+        <button onClick={onClose} style={{background:"none",border:"none",color:"#9ca3af",cursor:"pointer",fontSize:18,lineHeight:1,padding:"4px 8px",transition:"color 0.18s"}}
+          onMouseEnter={e=>e.currentTarget.style.color="#111827"}
+          onMouseLeave={e=>e.currentTarget.style.color="#9ca3af"}>✕</button>
+      </div>
+
+      {/* Content */}
+      <div style={{maxWidth:1040,margin:"0 auto",padding: isMobile ? "32px 20px 64px" : "56px 40px 96px"}}>
+
+        {/* Hero */}
+        <div style={{maxWidth:720,marginBottom: isMobile ? 36 : 52}}>
+          <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:11,color:"#82261E",letterSpacing:"0.12em",marginBottom:16}}>INSIGHTS</div>
+          <h1 style={{fontFamily:"'Syne',sans-serif",fontSize: isMobile ? 30 : 44,fontWeight:800,color:"#111827",lineHeight:1.12,letterSpacing:"-0.02em",marginBottom:18}}>
+            Notes from inside real operations.
+          </h1>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize: isMobile ? 15 : 17,color:"#6b7280",lineHeight:1.7}}>
+            We build AI systems inside other people's companies for a living. This is what we have learned doing it, written plainly. No hype, no listicles, no invented numbers.
+          </p>
+        </div>
+
+        {/* Article grid */}
+        <div style={{display:"grid",gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",gap: isMobile ? 22 : 28}}>
+          {INSIGHTS_ARTICLES.map(a=>(
+            <a key={a.href} href={a.href} style={{
+              display:"flex",flexDirection:"column",
+              background:"#ffffff",border:"1px solid #e5e7eb",borderRadius:16,overflow:"hidden",
+              textDecoration:"none",transition:"border-color 0.18s, box-shadow 0.18s, transform 0.18s",
+            }}
+              onMouseEnter={e=>{e.currentTarget.style.borderColor="#82261E";e.currentTarget.style.boxShadow="0 12px 28px rgba(17,24,39,0.08)";e.currentTarget.style.transform="translateY(-2px)";}}
+              onMouseLeave={e=>{e.currentTarget.style.borderColor="#e5e7eb";e.currentTarget.style.boxShadow="none";e.currentTarget.style.transform="none";}}>
+              {/* Article image — 800×450 (16:9) */}
+              <div style={{
+                position:"relative",width:"100%",aspectRatio:"16 / 9",
+                background:"linear-gradient(135deg,#f9fafb 0%,#f3f4f6 100%)",
+                borderBottom:"1px solid #f0f0f0",overflow:"hidden",
+              }}>
+                <img src={a.img} alt={a.title} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}/>
+              </div>
+              <div style={{padding: isMobile ? "20px 20px 24px" : "24px 26px 26px",display:"flex",flexDirection:"column",flex:1}}>
+                <h2 style={{fontFamily:"'Syne',sans-serif",fontSize: isMobile ? 19 : 21,fontWeight:700,color:"#111827",lineHeight:1.25,letterSpacing:"-0.01em",marginBottom:10}}>{a.title}</h2>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b7280",lineHeight:1.7,marginBottom:18,flex:1}}>{a.blurb}</p>
+                <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:11,color:a.accent,letterSpacing:"0.08em"}}>Read the piece →</span>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        {/* CTA strip */}
+        <div style={{
+          marginTop: isMobile ? 40 : 60,
+          background:"#f9fafb",border:"1px solid #e5e7eb",borderRadius:16,
+          padding: isMobile ? "28px 22px" : "40px 44px",
+          display:"flex",flexDirection: isMobile ? "column" : "row",
+          alignItems: isMobile ? "flex-start" : "center",justifyContent:"space-between",gap:20,
+        }}>
+          <div style={{maxWidth:560}}>
+            <h3 style={{fontFamily:"'Syne',sans-serif",fontSize: isMobile ? 20 : 24,fontWeight:700,color:"#111827",lineHeight:1.2,letterSpacing:"-0.01em",marginBottom:8}}>
+              Have a workflow like the ones we write about?
+            </h3>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"#6b7280",lineHeight:1.7}}>
+              Tell us one process that is slow, manual, or broken, and we will show you what it looks like running differently.
+            </p>
+          </div>
+          <button className="pbtn accentbtn" style={{whiteSpace:"nowrap",flexShrink:0}} onClick={()=>{ onClose(); onContact(); }}>
+            Map your workflow
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
 // ─── Main App ─────────────────────────────────────────────────────────────────
 
 export default function App() {
@@ -1693,6 +1822,7 @@ export default function App() {
   const [graphPoints, setGP]        = useState([12]);
   const [aboutOpen, setAboutOpen]         = useState(false);
   const [casesOpen, setCasesOpen]         = useState(false);
+  const [insightsOpen, setInsightsOpen]   = useState(false);
   const [contactOpen, setContact]         = useState(false);
   const [investorOpen, setInvestorOpen]   = useState(false);
   const [investorForm, setInvestorForm]   = useState(false);
@@ -1701,6 +1831,19 @@ export default function App() {
 
   const openContact = () => { setContact(true); setMenuOpen(false); };
   const closeContact = () => setContact(false);
+
+  // Open the contact modal immediately when arriving from a static page CTA (e.g. /?contact=1)
+  useEffect(()=>{
+    if(typeof window==="undefined") return;
+    const params=new URLSearchParams(window.location.search);
+    if(params.get("contact")==="1"){
+      setContact(true);
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+    if(params.get("hub")==="1"){
+      window.location.href = "/aiworkflowshub/";
+    }
+  },[]);
 
   // Close mobile menu when user navigates away from step 0
   useEffect(()=>{ setMenuOpen(false); },[step]);
@@ -1764,6 +1907,7 @@ export default function App() {
           <div style={{display:"flex",alignItems:"center",gap:isMobile?8:14}}>
             {step>0&&<button className="rbtn" onClick={reset}>↩ restart</button>}
             <button className="abtn" onClick={()=>setAboutOpen(true)}>About us</button>
+            <a className="abtn" style={{color:"#ffffff",textDecoration:"none"}} href="/aiworkflowshub/">AI Workflow Hub</a>
             <button className="abtn" onClick={()=>setCasesOpen(true)}>Case studies</button>
             <button className="abtn" onClick={()=>setInvestorOpen(true)}>We're Hiring</button>
             {/* ── Hamburger — mobile only ── */}
@@ -1788,13 +1932,14 @@ export default function App() {
           <div style={{position:"absolute",top:isMobile?46:54,left:0,right:0,zIndex:19,background:"linear-gradient(180deg,#0f0f14 0%,#0a0a0d 100%)",borderBottom:"0.5px solid rgba(255,255,255,0.08)",animation:"fadeUp 0.18s ease",display:"flex",flexDirection:"column"}}>
             {[
               {label:"About us",      action:()=>{setAboutOpen(true);setMenuOpen(false);}},
+              {label:"AI Workflow Hub", action:()=>{window.location.href="/aiworkflowshub/";}},
               {label:"Case studies",  action:()=>{setCasesOpen(true);setMenuOpen(false);}},
               {label:"We're Hiring",  action:()=>{setInvestorOpen(true);setMenuOpen(false);}},
             ].map((item,i)=>(
               <button
                 key={item.label}
                 onClick={item.action}
-                style={{background:"none",border:"none",borderBottom:i<2?"0.5px solid rgba(255,255,255,0.05)":"none",color:"#ece9e4",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontSize:14,fontWeight:400,padding:"16px 20px",textAlign:"left",transition:"background 0.15s",letterSpacing:"0.01em"}}
+                style={{background:"none",border:"none",borderBottom:i<3?"0.5px solid rgba(255,255,255,0.05)":"none",color:"#ece9e4",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontSize:14,fontWeight:400,padding:"16px 20px",textAlign:"left",transition:"background 0.15s",letterSpacing:"0.01em"}}
                 onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,0.04)"}
                 onMouseLeave={e=>e.currentTarget.style.background="none"}
               >
@@ -1947,6 +2092,7 @@ export default function App() {
             selectedTools={selectedTools}
           />
         )}
+        {insightsOpen && <InsightsScreen onClose={()=>setInsightsOpen(false)} onContact={openContact}/>}
         {investorOpen && <CareersPanel onClose={()=>setInvestorOpen(false)} onContact={()=>setInvestorForm(true)}/>}
         {investorForm && <CareerModal onClose={()=>setInvestorForm(false)}/>}
       </div>

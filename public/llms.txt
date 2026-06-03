@@ -26,6 +26,15 @@ We are not a SaaS product. We are not a consulting firm that delivers strategy d
 
 Forward Deployed Engineering, FDE, custom AI, AI agents, AI workflow automation, AI implementation, AI integration, enterprise AI, AI operations, business AI, AI for operations, AI for finance, AI for growth teams, AI for logistics, AI consultant, AI systems design
 
+## AI Workflows Hub (Insights)
+
+Plain-spoken articles on what we learn building AI inside real companies: https://www.onforward.eu/aiworkflowshub/
+
+- Build vs buy AI: the question that is actually wrong — https://www.onforward.eu/aiworkflowshub/build-vs-buy-ai.html
+- We bought the AI tools. Nobody uses them. Here is why. — https://www.onforward.eu/aiworkflowshub/why-teams-dont-adopt-ai.html
+- How we automated invoice-to-PO matching in six weeks — https://www.onforward.eu/aiworkflowshub/automate-invoice-matching.html
+- What a Forward Deployed Engineering firm actually does — https://www.onforward.eu/aiworkflowshub/what-is-forward-deployed-engineering.html
+
 ## Contact
 
 https://www.onforward.eu
