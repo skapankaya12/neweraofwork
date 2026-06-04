@@ -1078,20 +1078,12 @@ function CareersPanel({onClose, onContact}) {
 
   const jobs = [
     {
-      id: "ae",
-      title: "Account Executive",
-      tag: "Sales",
+      id: "fdpm",
+      title: "Forward Deployed Product Manager",
+      tag: "Client · Product · Project-based",
       tagColor: "#7fffd4",
-      short: "You'll be the first real conversation most of our clients have with us.",
-      detail: "You'll work with startups from mid to high-level size, the ones that are serious about actually changing how they operate, not just buying another tool.\n\nThis isn't enterprise sales. There's no playbook, no deck to read from. You'll listen, understand what's actually broken, and figure out whether we're the right fit. Honestly, sometimes we're not, and you'll say so.\n\nIf you know how to have a real conversation, move fast, and genuinely care about the people on the other side of the call, you'll feel right at home here.",
-    },
-    {
-      id: "fde",
-      title: "Forward Deployed Engineer",
-      tag: "Engineering · AI",
-      tagColor: "#a78bfa",
-      short: "You build the actual thing. The agent that runs, the workflow that ships.",
-      detail: "This is an AI developer role. You'll be embedded with clients, working directly on their operations, mapping workflows, building agents, wiring things together until they actually work.\n\nYou don't need a traditional background. We don't care where you went to school or what your LinkedIn looks like. What matters is what you've actually built with AI and how you think through problems.\n\nYou'll be working with LLMs, automations, integrations, and occasionally some pretty gnarly legacy processes. If you like figuring things out from scratch and shipping things that matter, this is it.",
+      short: "You own the client from the first call to the thing we ship.",
+      detail: "This role starts the moment a client comes on board. You take the brief, run the first call, and from there you own the relationship. You're the person who really understands what they do and what's quietly slowing them down.\n\nYour job is to be the bridge. You turn a company's messy, real-world workflow into something our engineers can build, and you stay close through delivery so what we ship actually solves the business problem, not a tidy version of it that looked good on paper.\n\nIt's project based. When we sign a client, we assign them to you and you carry it end to end: scoping the work, managing the build alongside the engineers as the product owner, and keeping the client confident the whole way through.\n\nYou'd fit if you've run client-facing projects before, can talk to a business owner about their operations and to engineers about what to build, and like figuring out a process nobody has written down. You don't need to code. You do need to think clearly and communicate even more clearly.",
     },
   ];
 
@@ -1182,7 +1174,7 @@ function CareerModal({onClose}) {
   };
 
   const lbl = {fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#5a5a62",letterSpacing:"0.1em",marginBottom:6,display:"block"};
-  const ROLES = ["Account Executive","Forward Deployed Engineer"];
+  const ROLES = ["Forward Deployed Product Manager"];
 
   return (
     <>
