@@ -3,6 +3,16 @@ import { motion } from "framer-motion";
 import { usePresence } from "./firebase";
 import aboutDiagram from "./assets/about-diagram.png";
 
+// ─── GA4 event tracking helper ────────────────────────────────────────────────
+// Sends a named event to Google Analytics (gtag). Safe no-op if GA isn't loaded.
+function track(event, params = {}) {
+  try {
+    if (typeof window !== "undefined" && typeof window.gtag === "function") {
+      window.gtag("event", event, params);
+    }
+  } catch (e) {}
+}
+
 try {
   const l = document.createElement("link");
   l.rel = "stylesheet";
@@ -786,6 +796,7 @@ function ContactModal({onClose, dept, selectedTools}) {
       });
     } catch (_) {}
 
+    track("generate_lead", { form: "contact", department: dept?.label || "" });
     setTimeout(() => setPhase("success"), 900);
   };
 
@@ -1170,6 +1181,7 @@ function CareerModal({onClose}) {
     try {
       fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({...form,type:"career",submittedAt:new Date().toISOString()})});
     } catch(_){}
+    track("career_apply", { role: form.role || "" });
     setTimeout(()=>setPhase("success"),900);
   };
 
@@ -1821,7 +1833,7 @@ export default function App() {
 
   const liveCount = usePresence();
 
-  const openContact = () => { setContact(true); setMenuOpen(false); };
+  const openContact = () => { track("cta_click", { cta: "get_in_touch" }); setContact(true); setMenuOpen(false); };
   const closeContact = () => setContact(false);
 
   // Open the contact modal immediately when arriving from a static page CTA (e.g. /?contact=1)
