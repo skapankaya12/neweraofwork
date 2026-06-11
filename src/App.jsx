@@ -1688,6 +1688,14 @@ function AboutPanel({onClose, onContact}) {
 
 const INSIGHTS_ARTICLES = [
   {
+    tag: "Hands-on",
+    accent: "#7c3aed",
+    title: "Top 5 prompts for Claude Fable 5: run them in order, get a scoped AI project",
+    blurb: "Prompt lists treat prompts like recipes. These five are a sequence. An hour with Anthropic's new model and you are holding a mapped workflow and a pilot you could actually start.",
+    href: "/aiworkflowshub/claude-fable-5-prompts.html",
+    img: "/aiworkflowshub/fable-5-prompts.png",
+  },
+  {
     tag: "Decision",
     accent: "#82261E",
     title: "Build vs buy AI: the question that is actually wrong",

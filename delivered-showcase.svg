@@ -1,0 +1,47 @@
+<svg width="1200" height="1060" viewBox="0 0 680 600" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>On Forward delivered showcase card</title>
+<desc>A showcase card for a tech client: company GPT, scheduled tasks, projects plus custom skills, and role-matched setup, delivered in weeks.</desc>
+<style>
+.t{font-family:'Helvetica Neue',Arial,sans-serif;fill:#1a1a1a}
+.ts{font-family:'Helvetica Neue',Arial,sans-serif;fill:#5f5e5a;font-size:14px}
+.th{font-family:'Helvetica Neue',Arial,sans-serif;fill:#1a1a1a}
+</style>
+<rect x="0" y="0" width="680" height="600" fill="#ffffff"/>
+
+<rect x="40" y="36" width="64" height="26" rx="13" fill="#E1F5EE"/>
+<text x="72" y="53" text-anchor="middle" class="ts" style="fill:#0F6E56;font-size:13px">Delivered</text>
+
+<text x="40" y="110" class="t" style="font-size:30px;font-weight:500">We went in, learned how they</text>
+<text x="40" y="148" class="t" style="font-size:30px;font-weight:500">work, and built it.</text>
+
+<text x="40" y="190" class="ts" style="font-size:15px">A tech company with no time and no spare team to stand up the AI setup</text>
+<text x="40" y="212" class="ts" style="font-size:15px">themselves, and no appetite to spend months on it. We scoped it together</text>
+<text x="40" y="234" class="ts" style="font-size:15px">and built it in weeks.</text>
+
+<rect x="40" y="268" width="290" height="92" rx="12" fill="#EEEDFE"/>
+<text x="64" y="302" class="th" style="font-size:16px;fill:#3C3489">Company GPT</text>
+<text x="64" y="328" class="ts" style="fill:#534AB7">Answers from their own docs,</text>
+<text x="64" y="346" class="ts" style="fill:#534AB7">not guesswork</text>
+
+<rect x="350" y="268" width="290" height="92" rx="12" fill="#E1F5EE"/>
+<text x="374" y="302" class="th" style="font-size:16px;fill:#085041">Scheduled tasks</text>
+<text x="374" y="328" class="ts" style="fill:#0F6E56">The recurring reports and checks</text>
+<text x="374" y="346" class="ts" style="fill:#0F6E56">now run themselves</text>
+
+<rect x="40" y="372" width="290" height="92" rx="12" fill="#FAECE7"/>
+<text x="64" y="406" class="th" style="font-size:16px;fill:#712B13">Projects + custom skills</text>
+<text x="64" y="432" class="ts" style="fill:#993C1D">Their most repetitive workflows,</text>
+<text x="64" y="450" class="ts" style="fill:#993C1D">automated</text>
+
+<rect x="350" y="372" width="290" height="92" rx="12" fill="#E6F1FB"/>
+<text x="374" y="406" class="th" style="font-size:16px;fill:#0C447C">Role-matched setup</text>
+<text x="374" y="432" class="ts" style="fill:#185FA5">Every person's tools connected</text>
+<text x="374" y="450" class="ts" style="fill:#185FA5">to Cowork</text>
+
+<line x1="40" y1="500" x2="640" y2="500" stroke="#D3D1C7" stroke-width="0.5"/>
+
+<text x="40" y="534" class="t" style="font-size:17px;font-weight:500">From "we should use AI" to AI actually running inside the business.</text>
+<text x="40" y="560" class="t" style="font-size:17px;font-weight:500">In weeks. Now everyone has their own AI workspace, for real.</text>
+
+<text x="40" y="588" class="ts" style="font-size:13px;fill:#888780">onforward.eu</text>
+</svg>

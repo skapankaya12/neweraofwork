@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-R8M57H5D8V"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-R8M57H5D8V');
+</script>
+<meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Top 5 prompts for Claude Fable 5: run them in order, get a scoped AI project | On Forward</title>
+    <meta name="description" content="The top 5 prompts for Claude Fable 5 are not five separate tricks. Run them in sequence and Anthropic's new model becomes an operations consultant for an hour: map the workflow, find the wait, audit the exceptions, draw the human line, scope the pilot." />
+    <link rel="canonical" href="https://www.onforward.eu/aiworkflowshub/claude-fable-5-prompts.html" />
+    <meta property="og:title" content="Top 5 prompts for Claude Fable 5: run them in order, get a scoped AI project | On Forward" />
+    <meta property="og:description" content="Five prompts for Claude Fable 5 that work as a sequence, not a list. From a team that builds AI workflows inside companies." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.onforward.eu/aiworkflowshub/claude-fable-5-prompts.html" />
+    <meta property="og:image" content="https://www.onforward.eu/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Top 5 prompts for Claude Fable 5: run them in order, get a scoped AI project",
+      "description": "Five prompts for Claude Fable 5 that work as a sequence: map the workflow, find the wait, audit the exceptions, draw the human line, scope the pilot.",
+      "image": "https://www.onforward.eu/og-image.png",
+      "author": { "@type": "Person", "name": "Melissa Merges", "url": "https://nl.linkedin.com/in/melissa-merges-487a69413", "worksFor": { "@type": "Organization", "name": "On Forward" } },
+      "publisher": {
+        "@type": "Organization",
+        "name": "On Forward",
+        "logo": { "@type": "ImageObject", "url": "https://www.onforward.eu/og-image.png" }
+      },
+      "mainEntityOfPage": "https://www.onforward.eu/aiworkflowshub/claude-fable-5-prompts.html"
+    }
+    </script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f5f2; --surface:#ffffff; --text:#1b1b20; --muted:#6b6b73;
+  --line:rgba(0,0,0,.10); --accent:#b5362a; --accent-deep:#82261E;
+  --chip:rgba(181,54,42,.08); --chip-line:rgba(181,54,42,.28);
+}
+html[data-theme="dark"]{
+  --bg:#0b0b0f; --surface:#131318; --text:#ece9e4; --muted:#9a9aa2;
+  --line:rgba(255,255,255,.10); --accent:#e0564a; --accent-deep:#e0564a;
+  --chip:rgba(224,86,74,.08); --chip-line:rgba(224,86,74,.30);
+}
+body{background:var(--bg);color:var(--text);font-family:'Newsreader',Georgia,serif;
+  line-height:1.75;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
+.progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:60}
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 24px;background:color-mix(in srgb,var(--bg) 86%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text);text-decoration:none}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+.brand b{font-weight:500;color:var(--muted)}
+.tools{display:flex;align-items:center;gap:8px}
+.toggle{display:flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);
+  border-radius:999px;padding:7px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;
+  letter-spacing:.08em;color:var(--muted);cursor:pointer;transition:.2s}
+.toggle:hover{border-color:var(--accent);color:var(--text)}
+.toggle svg{width:14px;height:14px}
+main{max-width:680px;margin:0 auto;padding:46px 24px 72px}
+nav.crumb{font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:26px}
+nav.crumb a{color:var(--muted);text-decoration:none}
+nav.crumb a:hover{color:var(--accent)}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.kicker{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;
+  color:var(--accent);text-transform:uppercase;background:var(--chip);border:1px solid var(--chip-line);
+  border-radius:999px;padding:5px 12px}
+h1{font-family:'Syne',sans-serif;font-weight:800;font-size:40px;line-height:1.12;letter-spacing:-.01em;margin:18px 0 16px}
+.byline{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-family:'JetBrains Mono',monospace;
+  font-size:12px;color:var(--muted);padding-bottom:26px;margin-bottom:8px;border-bottom:1px solid var(--line)}
+.byline .sep{opacity:.5}
+h2{font-family:'Syne',sans-serif;font-weight:700;font-size:25px;line-height:1.25;margin:42px 0 6px}
+p{margin:18px 0;font-size:19px;color:var(--text)}
+.lede{font-size:22px;line-height:1.6;color:var(--text);margin-top:26px}
+.lede::first-letter{font-family:'Syne',sans-serif;font-weight:800;font-size:64px;float:left;
+  line-height:.82;padding:6px 14px 0 0;color:var(--accent)}
+figure{margin:38px 0}
+figure svg{width:100%;height:auto;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:#0c0c11;padding:6px}
+figcaption{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-top:10px;text-align:center}
+.ref{background:var(--chip);border:1px solid var(--chip-line);border-left:3px solid var(--accent);
+  border-radius:12px;padding:18px 20px;margin:30px 0;font-size:16px;color:var(--text)}
+.ref .lbl{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:var(--accent);
+  text-transform:uppercase;display:block;margin-bottom:7px}
+.prompt{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:12px;padding:18px 20px;margin:22px 0;font-family:'JetBrains Mono',monospace;
+  font-size:14px;line-height:1.65;color:var(--text);white-space:pre-wrap}
+.pull{font-family:'Syne',sans-serif;font-weight:700;border-left:3px solid var(--accent);padding:4px 0 4px 22px;
+  margin:34px 0;font-size:26px;line-height:1.35;color:var(--text)}
+.result{background:var(--chip);border:1px solid var(--chip-line);border-radius:12px;padding:16px 20px;
+  margin:26px 0;font-size:17px;color:var(--text)}
+.result strong{color:var(--accent)}
+.cta{display:flex;gap:14px;flex-wrap:wrap;margin:48px 0 8px;padding-top:30px;border-top:1px solid var(--line)}
+.btn{display:inline-block;padding:14px 24px;border-radius:11px;font-family:'JetBrains Mono',monospace;
+  font-size:13px;letter-spacing:.04em;font-weight:500}
+.btn-primary{background:linear-gradient(25deg,#5a1812 0%,var(--accent-deep) 75%);color:#fff;
+  border:1px solid var(--chip-line)}
+.btn-primary:hover{text-decoration:none;filter:brightness(1.12)}
+.btn-ghost{border:1px solid var(--line);color:var(--text)}
+.btn-ghost:hover{text-decoration:none;border-color:var(--accent);color:var(--accent)}
+footer{max-width:680px;margin:0 auto;padding:0 24px 60px;font-family:'JetBrains Mono',monospace;
+  font-size:12px;color:var(--muted)}
+footer a{color:var(--muted)}
+@media(max-width:600px){h1{font-size:31px}main{padding:32px 20px 56px}p,.lede{font-size:18px}.pull{font-size:22px}}
+
+.author{margin:48px 0 8px;padding-top:30px;border-top:1px solid var(--line)}
+.author .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+  color:var(--accent);text-transform:uppercase;margin-bottom:14px}
+.author .badgewrap{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px;
+  display:inline-block;max-width:300px}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="topbar">
+  <a class="brand" href="/aiworkflowshub/"><span class="dot"></span>On&nbsp;Forward <b>/ AI Workflows Hub</b></a>
+  <div class="tools">
+    <button class="toggle" id="themeToggle" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><span id="tlabel">Dark</span></button>
+  </div>
+</div>
+<main>
+  <nav class="crumb"><a href="/aiworkflowshub/">← AI Workflows Hub</a></nav>
+  <article>
+        <span class="kicker">Hands-on</span>
+        <h1>Top 5 prompts for Claude Fable 5: run them in order, get a scoped AI project</h1>
+        <div class="byline">By <a href="https://nl.linkedin.com/in/melissa-merges-487a69413" target="_blank" rel="noopener">Melissa Merges</a> <span class="sep">·</span> 4 min read <span class="sep">·</span> Updated June 2026</div>
+
+        <p class="lede">Every prompt list treats prompts like recipes: pick one, get a dish. That works for writing emails. It does not work for fixing operations. The five prompts below are a sequence. Each answer becomes the input to the next prompt, and an hour later you are holding something most companies pay a consultant weeks to produce: a mapped workflow, an honest list of what can be automated, and a pilot you could actually start.</p>
+
+        <p>The occasion is Anthropic's release of Claude Fable 5, covered well by VentureBeat. It is the first Mythos-class model the public can use, priced below its preview predecessor, and stronger than anything generally available before it. The launch coverage is about benchmarks. What it does not tell you is what an operations leader should do with that capability on Monday. That is the part we do for a living, so here it is.</p>
+
+        <div class="ref">
+          <span class="lbl">The piece we are responding to</span>
+          VentureBeat, <a href="https://venturebeat.com/technology/anthropic-brings-mythos-to-the-masses-with-claude-fable-5-its-most-powerful-generally-available-model-ever" target="_blank" rel="noopener">Anthropic brings Mythos to the masses with Claude Fable 5</a>. The coverage explains what the model can do. Our addition: a one-hour sequence that turns that capability into a scoped project instead of a pile of clever answers.
+        </div>
+
+        <figure>
+          <svg viewBox="0 0 720 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five prompts in sequence: map, find the wait, audit exceptions, draw the human line, scope the pilot. Each output feeds the next prompt.">
+            <rect x="20" y="85" width="116" height="50" rx="9" fill="none" stroke="#5a5a62"/>
+            <text x="78" y="114" fill="#cfcdc8" font-family="monospace" font-size="12" text-anchor="middle">1 map</text>
+            <line x1="136" y1="110" x2="160" y2="110" stroke="#5a5a62" stroke-width="1.5"/>
+            <rect x="160" y="85" width="116" height="50" rx="9" fill="none" stroke="#5a5a62"/>
+            <text x="218" y="114" fill="#cfcdc8" font-family="monospace" font-size="12" text-anchor="middle">2 the wait</text>
+            <line x1="276" y1="110" x2="300" y2="110" stroke="#5a5a62" stroke-width="1.5"/>
+            <rect x="300" y="85" width="116" height="50" rx="9" fill="none" stroke="#5a5a62"/>
+            <text x="358" y="114" fill="#cfcdc8" font-family="monospace" font-size="12" text-anchor="middle">3 exceptions</text>
+            <line x1="416" y1="110" x2="440" y2="110" stroke="#5a5a62" stroke-width="1.5"/>
+            <rect x="440" y="85" width="116" height="50" rx="9" fill="none" stroke="#5a5a62"/>
+            <text x="498" y="114" fill="#cfcdc8" font-family="monospace" font-size="12" text-anchor="middle">4 human line</text>
+            <line x1="556" y1="110" x2="580" y2="110" stroke="#5a5a62" stroke-width="1.5"/>
+            <rect x="580" y="85" width="120" height="50" rx="9" fill="rgba(224,86,74,.10)" stroke="#e0564a"/>
+            <text x="640" y="114" fill="#e0564a" font-family="monospace" font-size="12" text-anchor="middle">5 pilot</text>
+          </svg>
+          <figcaption>Not five tricks. One conversation, in order. Each answer is the next prompt's input.</figcaption>
+        </figure>
+
+        <h2>Prompt 1: describe it badly, let the model map it</h2>
+        <div class="prompt">I am going to describe how [process] works at our company, messily and out of order, the way I would explain it to a new hire over coffee: [do exactly that]. Turn this into a step-by-step map: who does each step, in which system, what they are waiting for, and what silently breaks when that person is out.</div>
+        <p>Do not clean up your description. The tidy version of a workflow is the org chart's version. The messy version is the real one, and Fable 5 is now good enough to untangle it.</p>
+
+        <h2>Prompt 2: find where the work waits</h2>
+        <div class="prompt">Take the map above. For each step, estimate where time is spent doing versus waiting. Rank the steps by waiting time and tell me which single handoff, if removed, would shorten the whole process most.</div>
+        <p>This is the question that found the real problem at a B2B SaaS client of ours. Their inbound leads waited 6 to 9 hours, not because anyone was slow, but because triage sat in a queue behind other work. The fix we built classified, scored, and routed each lead in real time with a pre-drafted first response. Response time fell to under 4 minutes. The build took weeks. Seeing the wait took one honest look at the map.</p>
+
+        <h2>Prompt 3: audit the exceptions</h2>
+        <div class="prompt">Here are real examples of cases that did not go smoothly through [the step from prompt 2], details removed: [paste 20 or more]. Group them. For each group, say whether a fixed rule, a model, or a human should handle it, and what information whoever handles it would need.</div>
+        <p>Exceptions are where automation projects die quietly. Surface them before you build, not after.</p>
+
+        <h2>Prompt 4: draw the human line</h2>
+        <div class="prompt">Based on everything above, propose where the human stays in this workflow permanently. Not as a transition step. Permanently. What judgment in this process should we never hand to a model, and why?</div>
+        <p>If the answer comes back "nothing needs a human", push back. In every workflow we have shipped, the strongest version kept a person at the point of judgment and removed them from the points of transport.</p>
+
+        <h2>Prompt 5: scope a pilot you could start Monday</h2>
+        <div class="prompt">Design the smallest pilot that automates [the handoff from prompt 2] while respecting the human line from prompt 4. Six weeks, week by week. Name the single number we measure to know it worked, and what we do if it did not.</div>
+
+        <div class="pull">A smarter model does not know your company. You do. The hour you spend telling it is the most valuable hour of the whole project.</div>
+
+        <h2>The honest footnote</h2>
+        <p>This sequence gives you a scoped project, and for some teams that is enough to act on alone. But a plan in a chat window does not connect to your ERP, watch your inbox, or run at 7am without being asked. Crossing that gap is a build, and it is the build that we do: we embed with your team, map the workflow properly, build the agent, and support it after. If prompt 2 shows you a handoff that is eating days of someone's week, bring us the map. We will tell you plainly whether it is worth building, and sometimes the honest answer is that an off-the-shelf tool will do.</p>
+
+        <section class="author">
+          <span class="lbl">About the author</span>
+          <div class="badgewrap">
+            <div class="badge-base LI-profile-badge" data-locale="en_US" data-size="medium" data-theme="light" data-type="VERTICAL" data-vanity="melissa-merges-487a69413" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://nl.linkedin.com/in/melissa-merges-487a69413?trk=profile-badge">Melissa Merges</a></div>
+          </div>
+        </section>
+
+        <div class="cta">
+          <a class="btn btn-primary" href="https://www.onforward.eu/?contact=1">Map one workflow with us</a>
+          <a class="btn btn-ghost" href="/aiworkflowshub/">← Back to the hub</a>
+        </div>
+      </article>
+</main>
+<footer>© 2026 On Forward · AI Workflow Agency · <a href="/?contact=1">Start a conversation</a></footer>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var saved=localStorage.getItem('of-theme')||'light';
+  root.setAttribute('data-theme',saved);
+  function label(){var d=root.getAttribute('data-theme')==='dark';
+    document.getElementById('tlabel').textContent=d?'Light':'Dark';}
+  label();
+  document.getElementById('themeToggle').addEventListener('click',function(){
+    var d=root.getAttribute('data-theme')==='dark';
+    root.setAttribute('data-theme',d?'light':'dark');
+    localStorage.setItem('of-theme',d?'light':'dark');label();
+  });
+  var bar=document.getElementById('progress');
+  function upd(){var h=document.body.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h)*100:0)+'%';}
+  addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
+})();
+</script>
+<script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
+</body>
+</html>
